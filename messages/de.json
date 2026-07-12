@@ -1,0 +1,19 @@
+{
+  "common": {
+    "skipToContent": "Zum Inhalt springen",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "switchLocale": "English version",
+    "errorReload": "Etwas ist schiefgelaufen. Bitte lade die Seite neu."
+  },
+  "form": {
+    "nameLabel": "Name",
+    "emailLabel": "E-Mail",
+    "messageLabel": "Nachricht",
+    "submitLabel": "Nachricht senden",
+    "submitting": "Wird gesendet…",
+    "validationName": "Bitte gib deinen Namen ein.",
+    "validationEmail": "Bitte gib eine gültige E-Mail-Adresse ein.",
+    "validationMessage": "Die Nachricht braucht mindestens 20 Zeichen."
+  }
+}

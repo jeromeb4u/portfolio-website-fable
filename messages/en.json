@@ -1,0 +1,19 @@
+{
+  "common": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLocale": "Deutsche Version",
+    "errorReload": "Something went wrong. Reload the page."
+  },
+  "form": {
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "submitLabel": "Send message",
+    "submitting": "Sending…",
+    "validationName": "Please enter your name.",
+    "validationEmail": "Please enter a valid email address.",
+    "validationMessage": "Message needs at least 20 characters."
+  }
+}

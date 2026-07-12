@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens — source of truth: plan/01-design-system.md
+  Fonts (Geist / Geist Mono / Instrument Serif) are wired via next/font in Phase 2;
+  --font-* variables below pick them up automatically once set on <html>.
+*/
+@theme {
+  --color-bg: #fafaf8;
+  --color-surface: #f1f0ec;
+  --color-ink: #171819;
+  --color-ink-muted: #5f6163;
+  --color-accent: #ff5900; /* large text (≥24px) & graphics only */
+  --color-accent-strong: #c24400; /* links + small accent text (AA-safe) */
+  --color-accent-glow: #ff8a4c; /* gradients only, never text */
+  --color-line: rgb(23 24 25 / 0.12);
+  --color-inverse-bg: #171819;
+  --color-inverse-text: #fafaf8;
+  --color-inverse-muted: rgb(250 250 248 / 0.6);
+
+  --font-sans: var(--font-geist, ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, ui-monospace, monospace);
+  --font-serif: var(--font-instrument-serif, ui-serif, Georgia, serif);
+
+  --text-display: clamp(3.25rem, 8.5vw, 8rem);
+  --text-h2: clamp(2rem, 4.5vw, 3.75rem);
+  --text-h3: clamp(1.375rem, 2.2vw, 1.875rem);
+  --text-body-lg: clamp(1.0625rem, 1.4vw, 1.25rem);
+
+  --ease-primary: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.3s;
+  --dur-base: 0.9s;
+  --dur-slow: 1.4s;
+
+  --spacing-section: clamp(6rem, 14vh, 11rem);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
