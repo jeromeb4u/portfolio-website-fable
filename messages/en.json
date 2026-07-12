@@ -1,10 +1,22 @@
 {
   "common": {
     "skipToContent": "Skip to content",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
+    "openMenu": "Menu",
+    "closeMenu": "Close",
     "switchLocale": "Deutsche Version",
     "errorReload": "Something went wrong. Reload the page."
+  },
+  "footer": {
+    "imprint": "Imprint",
+    "privacy": "Privacy"
+  },
+  "work": {
+    "view": "View case study",
+    "back": "All work",
+    "visit": "Visit live",
+    "code": "View code",
+    "prev": "Previous",
+    "next": "Next"
   },
   "form": {
     "nameLabel": "Name",

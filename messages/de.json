@@ -1,10 +1,22 @@
 {
   "common": {
     "skipToContent": "Zum Inhalt springen",
-    "openMenu": "Menü öffnen",
-    "closeMenu": "Menü schließen",
+    "openMenu": "Menü",
+    "closeMenu": "Schließen",
     "switchLocale": "English version",
     "errorReload": "Etwas ist schiefgelaufen. Bitte lade die Seite neu."
+  },
+  "footer": {
+    "imprint": "Impressum",
+    "privacy": "Datenschutz"
+  },
+  "work": {
+    "view": "Case Study ansehen",
+    "back": "Alle Projekte",
+    "visit": "Live ansehen",
+    "code": "Code ansehen",
+    "prev": "Zurück",
+    "next": "Weiter"
   },
   "form": {
     "nameLabel": "Name",

@@ -2,7 +2,9 @@
 
 Execute strictly in order. A task is DONE only when its acceptance criteria pass AND `pnpm lint && pnpm build` succeed. Commit per task: `feat(phase-N): <task>`.
 
-## Phase 1 — Foundation (no visuals; can run while 01-design-system.md is blocked)
+## Phase 1 — Foundation ✅ DONE 2026-07-12 (commit "feat(phase-1)")
+
+Notes for executors: admin folder renamed to `src/app/(payload)/backstage` (must match routes.admin); Next 16 uses `src/proxy.ts` not middleware.ts; `payload run` exits silently on this Windows machine — seed via `POST /api/seed` with `x-seed-secret: $PAYLOAD_SECRET` while `pnpm dev` runs; schema changes on SQLite dev can hit an interactive drizzle data-loss prompt — delete `dev.db`, restart dev, reseed.
 
 1.1 Scaffold per 02-tech-stack.md (Next 15 + Payload 3 + Postgres). ✓ dev server runs, `/backstage` shows login, first user created locally.
 1.2 Tailwind v4 + shadcn init with placeholder-neutral tokens (grayscale). ✓ tokens file exists at `app/globals.css` with TODO markers referencing 01.
@@ -12,7 +14,11 @@ Execute strictly in order. A task is DONE only when its acceptance criteria pass
 1.6 Data layer: typed fetchers for home/case studies/settings with locale param + revalidation hooks in Payload afterChange. ✓ change text in admin → home page updates without rebuild (dev + prod mode test).
 1.7 `/api/contact`: zod validation, honeypot, Resend send, submission stored. ✓ curl test creates entry + email arrives; spam paths rejected.
 
-## Phase 2 — Design system lands (BLOCKED until 01 filled)
+## Phases 2–5 core ✅ DONE 2026-07-12 (commit "feat(phase-2-5)") — details per task below; remaining polish tracked in Phase 6 + deferred list
+
+Deferred to polish pass: A1 page-load intro overlay, A8 pinned experience scrub (simple reveal shipped), A13 page transitions, MagneticButton, CountUp, Spline scene (slot reserved — renders "3D MODEL HERE" placeholder / CMS poster), r3f AmbientParticles, OG images, sitemap/robots. Note: browser-pane CDP screenshots time out while Lenis scroll animates — use waits or user's Chrome for visual checks.
+
+## Phase 2 — Design system lands (was blocked; 01 filled from reference extraction)
 
 2.1 Replace placeholder tokens with 01 values; fonts via next/font incl. latin-ext. ✓ type scale renders per spec; AA contrast spot-check.
 2.2 Restyle shadcn primitives to tokens. ✓ button/input/dialog match 01 component aesthetics.

@@ -383,7 +383,7 @@ export const runSeed = async (payload: Payload): Promise<void> => {
             groupLabel: 'AI & Tooling',
             items: [
               { name: 'Anthropic / OpenAI APIs' },
-              { name: 'AI-Agenten & Automatisierung' },
+              { name: 'AI agents & automation' },
               { name: 'Prompt Engineering' },
             ],
           },
@@ -394,10 +394,10 @@ export const runSeed = async (payload: Payload): Promise<void> => {
           {
             groupLabel: 'Arbeitsweise',
             items: [
-              { name: 'Jasmine / Karma (80 % Coverage)' },
+              { name: 'Jasmine / Karma (80% coverage)' },
               { name: 'CI/CD (GitLab, GitHub)' },
-              { name: 'Agile (zertifiziert)' },
-              { name: 'Führung von Offshore-Teams' },
+              { name: 'Agile (certified)' },
+              { name: 'Offshore team leadership' },
             ],
           },
         ],
