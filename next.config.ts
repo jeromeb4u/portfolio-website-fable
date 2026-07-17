@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // These ship native/platform binaries. Bundling them bakes in whatever OS
+  // built the app (e.g. Windows) — deploying that .next to a Linux server
+  // then fails with "Cannot find module". Marking them external means Node
+  // resolves them from the deploy target's own node_modules at runtime.
+  serverExternalPackages: ['sharp', 'pg', '@libsql/client'],
+  // @google/model-viewer ships pre-built ESM but some bundler setups need it
+  // explicitly transpiled/traced rather than treated as a pure external.
+  transpilePackages: ['@google/model-viewer'],
   async headers() {
     return [
       {

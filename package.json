@@ -17,6 +17,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
+    "@google/model-viewer": "^4.3.1",
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
     "@payloadcms/db-postgres": "3.86.0",
