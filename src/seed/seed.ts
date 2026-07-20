@@ -194,7 +194,9 @@ export const runSeed = async (payload: Payload): Promise<void> => {
       },
       about: {
         heading: 'About',
-        portraitImage: portraitId,
+        // media ids are numeric in this Postgres project; upsertMedia's return
+        // is widened to number|string, so narrow it for the strict global data
+        portraitImage: portraitId as number,
         body: rt(
           'I spent five and a half years at Infosys building and leading large-scale web applications for clients like Truist and Optus — from a legacy AngularJS-to-Angular 16 migration with a 25-person offshore team to BI portals used by thousands of employees.',
           'Since February 2025 I work independently: building React applications, AI-powered tools and automation for founders and small businesses. I am relocating to Germany and learning German.',
