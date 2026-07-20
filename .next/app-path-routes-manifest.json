@@ -1,0 +1,21 @@
+{
+  "/(frontend)/[locale]/imprint/page": "/[locale]/imprint",
+  "/(frontend)/[locale]/opengraph-image-kqgmn0/route": "/[locale]/opengraph-image-kqgmn0",
+  "/(frontend)/[locale]/page": "/[locale]",
+  "/(frontend)/[locale]/privacy/page": "/[locale]/privacy",
+  "/(frontend)/[locale]/work/[slug]/page": "/[locale]/work/[slug]",
+  "/(frontend)/[locale]/work/page": "/[locale]/work",
+  "/(frontend)/[locale]/writing/[slug]/page": "/[locale]/writing/[slug]",
+  "/(frontend)/[locale]/writing/page": "/[locale]/writing",
+  "/(payload)/api/[...slug]/route": "/api/[...slug]",
+  "/(payload)/api/graphql-playground/route": "/api/graphql-playground",
+  "/(payload)/api/graphql/route": "/api/graphql",
+  "/(payload)/backstage/[[...segments]]/page": "/backstage/[[...segments]]",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/contact/route": "/api/contact",
+  "/api/seed/route": "/api/seed",
+  "/icon.svg/route": "/icon.svg",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml"
+}

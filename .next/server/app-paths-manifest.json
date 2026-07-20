@@ -1,0 +1,21 @@
+{
+  "/(frontend)/[locale]/imprint/page": "app/(frontend)/[locale]/imprint/page.js",
+  "/(frontend)/[locale]/opengraph-image-kqgmn0/route": "app/(frontend)/[locale]/opengraph-image-kqgmn0/route.js",
+  "/(frontend)/[locale]/page": "app/(frontend)/[locale]/page.js",
+  "/(frontend)/[locale]/privacy/page": "app/(frontend)/[locale]/privacy/page.js",
+  "/(frontend)/[locale]/work/[slug]/page": "app/(frontend)/[locale]/work/[slug]/page.js",
+  "/(frontend)/[locale]/work/page": "app/(frontend)/[locale]/work/page.js",
+  "/(frontend)/[locale]/writing/[slug]/page": "app/(frontend)/[locale]/writing/[slug]/page.js",
+  "/(frontend)/[locale]/writing/page": "app/(frontend)/[locale]/writing/page.js",
+  "/(payload)/api/[...slug]/route": "app/(payload)/api/[...slug]/route.js",
+  "/(payload)/api/graphql-playground/route": "app/(payload)/api/graphql-playground/route.js",
+  "/(payload)/api/graphql/route": "app/(payload)/api/graphql/route.js",
+  "/(payload)/backstage/[[...segments]]/page": "app/(payload)/backstage/[[...segments]]/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/contact/route": "app/api/contact/route.js",
+  "/api/seed/route": "app/api/seed/route.js",
+  "/icon.svg/route": "app/icon.svg/route.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js"
+}

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<url>
+<loc>http://localhost:3000/en</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en" />
+</url>
+<url>
+<loc>http://localhost:3000/en/imprint</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/imprint" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/imprint" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/imprint" />
+</url>
+<url>
+<loc>http://localhost:3000/en/privacy</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/privacy" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/privacy" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/privacy" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work" />
+</url>
+<url>
+<loc>http://localhost:3000/en/writing</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/writing" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/writing" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/writing" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/harbour-and-vine</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/harbour-and-vine" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/harbour-and-vine" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/harbour-and-vine" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/northgate</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/northgate" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/northgate" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/northgate" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/ridgeline-supply</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/ridgeline-supply" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/ridgeline-supply" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/ridgeline-supply" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/aperture-dental</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/aperture-dental" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/aperture-dental" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/aperture-dental" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/brightwater</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/brightwater" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/brightwater" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/brightwater" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/meridian-partners</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/meridian-partners" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/meridian-partners" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/meridian-partners" />
+</url>
+<url>
+<loc>http://localhost:3000/en/work/atelier-nord</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/atelier-nord" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/atelier-nord" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/atelier-nord" />
+</url>
+<url>
+<loc>http://localhost:3000/de</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en" />
+</url>
+<url>
+<loc>http://localhost:3000/de/imprint</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/imprint" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/imprint" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/imprint" />
+</url>
+<url>
+<loc>http://localhost:3000/de/privacy</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/privacy" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/privacy" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/privacy" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work" />
+</url>
+<url>
+<loc>http://localhost:3000/de/writing</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/writing" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/writing" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/writing" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/harbour-and-vine</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/harbour-and-vine" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/harbour-and-vine" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/harbour-and-vine" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/northgate</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/northgate" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/northgate" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/northgate" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/ridgeline-supply</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/ridgeline-supply" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/ridgeline-supply" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/ridgeline-supply" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/aperture-dental</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/aperture-dental" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/aperture-dental" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/aperture-dental" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/brightwater</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/brightwater" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/brightwater" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/brightwater" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/meridian-partners</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/meridian-partners" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/meridian-partners" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/meridian-partners" />
+</url>
+<url>
+<loc>http://localhost:3000/de/work/atelier-nord</loc>
+<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/work/atelier-nord" />
+<xhtml:link rel="alternate" hreflang="de" href="http://localhost:3000/de/work/atelier-nord" />
+<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/work/atelier-nord" />
+</url>
+</urlset>

@@ -1,0 +1,3 @@
+{
+  "/(payload)/backstage/[[...segments]]/page": "app/(payload)/backstage/[[...segments]]/page.js"
+}
