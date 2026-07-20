@@ -7,9 +7,12 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Toaster } from "sonner";
 import { routing, type Locale } from "@/i18n/routing";
 import { getSiteSettings, getNavigation } from "@/lib/data";
+import { buildLanguageAlternates, buildOpenGraph, absoluteUrl } from "@/lib/seo";
 import { SmoothScrollProvider } from "@/components/motion/SmoothScrollProvider";
+import { AmbientBackground } from "@/components/motion/AmbientBackground";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { PersonJsonLd } from "@/components/seo/PersonJsonLd";
 import "./globals.css";
 
 // Self-hosted at build time via next/font — no runtime Google request,
@@ -32,16 +35,32 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default:
-      "Jerome D'mello — Frontend Engineer (React, Angular) & AI Tool Builder",
-    template: "%s — Jerome D'mello",
-  },
-};
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) return {};
+  const t = await getTranslations({ locale, namespace: "meta" });
+  const title = t("title");
+  const description = t("description");
+
+  return {
+    metadataBase: new URL(absoluteUrl("/")),
+    title: { default: title, template: "%s — Jerome D'mello" },
+    description,
+    alternates: {
+      canonical: absoluteUrl(`/${locale}`),
+      languages: buildLanguageAlternates(""),
+    },
+    openGraph: buildOpenGraph({ locale, title, description, path: "" }),
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 export default async function LocaleLayout({
@@ -55,12 +74,18 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
-  const [settings, navigation, tCommon, tFooter] = await Promise.all([
-    getSiteSettings(locale as Locale),
-    getNavigation(locale as Locale),
-    getTranslations("common"),
-    getTranslations("footer"),
-  ]);
+  // The bilingual flip needs BOTH locales' labels: the CMS stores each nav
+  // item + CTA per locale, so we fetch the other locale too and pair by index.
+  const otherLocale: Locale = locale === "de" ? "en" : "de";
+  const [settings, navigation, altNavigation, tCommon, tFooter] =
+    await Promise.all([
+      getSiteSettings(locale as Locale),
+      getNavigation(locale as Locale),
+      getNavigation(otherLocale),
+      getTranslations("common"),
+      getTranslations("footer"),
+    ]);
+  const altItems = altNavigation.items ?? [];
 
   return (
     <html
@@ -68,6 +93,13 @@ export default async function LocaleLayout({
       className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
     >
       <body>
+        <AmbientBackground />
+        <PersonJsonLd
+          email={settings.email}
+          socialUrls={(settings.socials ?? [])
+            .filter((s) => s.platform !== "email")
+            .map((s) => s.url)}
+        />
         <NextIntlClientProvider>
           <SmoothScrollProvider>
             <a
@@ -78,11 +110,13 @@ export default async function LocaleLayout({
             </a>
             <Header
               siteName={settings.siteName}
-              items={(navigation.items ?? []).map((i) => ({
+              items={(navigation.items ?? []).map((i, idx) => ({
                 label: i.label,
                 anchor: i.anchor,
+                altLabel: altItems[idx]?.label ?? i.label,
               }))}
               ctaLabel={navigation.ctaLabel}
+              ctaAltLabel={altNavigation.ctaLabel ?? navigation.ctaLabel}
               openMenuLabel={tCommon("openMenu")}
               closeMenuLabel={tCommon("closeMenu")}
             />
@@ -95,6 +129,9 @@ export default async function LocaleLayout({
                 platform: s.platform,
                 url: s.url,
               }))}
+              availability={settings.availability}
+              availabilityNote={settings.availabilityNote ?? undefined}
+              contactLabel={tFooter("contact")}
               imprintLabel={tFooter("imprint")}
               privacyLabel={tFooter("privacy")}
               locale={locale}

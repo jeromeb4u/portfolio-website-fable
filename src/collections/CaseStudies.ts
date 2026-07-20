@@ -87,5 +87,23 @@ export const CaseStudies: CollectionConfig = {
       defaultValue: 0,
       admin: { description: 'Lower numbers appear first', position: 'sidebar' },
     },
+    {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Shown on the homepage Work grid. Unfeatured studies still appear on /work.',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'confidential',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Client work under NDA — shown with a badge, no live/repo links rendered.',
+        position: 'sidebar',
+      },
+    },
   ],
 }

@@ -29,7 +29,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
 
   return (
     <article className="container-site pb-24 pt-40">
-      <h1 className="text-h2 font-semibold text-ink">{page.heading}</h1>
+      <h1 className="font-serif text-h2 text-ink">{page.heading}</h1>
       <div className="mt-8 max-w-2xl space-y-4 text-ink-muted">
         <RichText data={page.body} />
       </div>

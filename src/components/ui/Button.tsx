@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 const styles = {
   // 01-design-system §5: pill buttons; primary fills accent-strong on hover (AA-safe)
   primary:
-    'bg-ink text-bg hover:bg-accent-strong hover:text-white active:scale-[0.98] transition-[background-color,color,transform] duration-300',
+    'bg-ink text-bg hover:bg-accent hover:text-bg active:scale-[0.98] transition-[background-color,color,transform] duration-300',
   ghost:
     'border border-line text-ink hover:border-ink active:scale-[0.98] transition-[border-color,transform] duration-300',
   inverse:

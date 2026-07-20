@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { CaseStudies } from './collections/CaseStudies'
+import { Posts } from './collections/Posts'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SiteSettings } from './globals/SiteSettings'
 import { Navigation } from './globals/Navigation'
@@ -46,7 +47,7 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, CaseStudies, ContactSubmissions],
+  collections: [Users, Media, CaseStudies, Posts, ContactSubmissions],
   globals: [SiteSettings, Navigation, Home, Imprint, Privacy],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

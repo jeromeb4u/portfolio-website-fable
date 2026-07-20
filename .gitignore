@@ -6,3 +6,13 @@ dev.db
 .DS_Store
 *.log
 .vercel
+
+# Local reference-site scrape — research only, never publish (third-party content)
+/surendraselvarage-copy
+/surendraselvarage-copy.whtt
+/backblue.gif
+/fade.gif
+/index.html
+
+# Build artifacts
+tsconfig.tsbuildinfo

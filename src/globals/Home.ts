@@ -52,6 +52,12 @@ export const Home: GlobalConfig = {
           fields: [
             { name: 'company', type: 'text', required: true },
             { name: 'role', type: 'text', required: true, localized: true },
+            {
+              name: 'narrativeHeadline',
+              type: 'text',
+              localized: true,
+              admin: { description: 'Short story beat shown above the role, e.g. "Where it began"' },
+            },
             { name: 'clientNote', type: 'text', localized: true },
             { name: 'dateStart', type: 'text', required: true, localized: true },
             { name: 'dateEnd', type: 'text', localized: true },
@@ -101,6 +107,11 @@ export const Home: GlobalConfig = {
       fields: [
         { name: 'heading', type: 'text', localized: true },
         {
+          name: 'linkedinRecommendationsUrl',
+          type: 'text',
+          admin: { description: '"More on LinkedIn" outlink shown beneath the quotes. Leave empty to hide.' },
+        },
+        {
           name: 'entries',
           type: 'array',
           fields: [
@@ -124,6 +135,16 @@ export const Home: GlobalConfig = {
             },
           ],
         },
+      ],
+    },
+    {
+      name: 'awards',
+      type: 'array',
+      admin: { description: 'Optional recognition list. Section is hidden entirely while empty.' },
+      fields: [
+        { name: 'date', type: 'text', required: true, admin: { description: 'Free-form, e.g. "Sep 2023"' } },
+        { name: 'title', type: 'text', required: true, localized: true },
+        { name: 'description', type: 'textarea', localized: true },
       ],
     },
     {

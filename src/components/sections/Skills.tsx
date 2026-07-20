@@ -1,34 +1,49 @@
 import React from 'react'
+import { getTranslations } from 'next-intl/server'
 import { Reveal } from '@/components/motion/Reveal'
-import { Marquee } from '@/components/motion/Marquee'
+import { SectionEyebrow } from '@/components/ui/SectionEyebrow'
 import type { Home } from '@/payload-types'
 
-/** Grouped marquee strips (plan/05 A9), alternating drift direction. */
-export function Skills({ home }: { home: Home }) {
+/**
+ * Static grouped index — mono group label left, items right, hairline rows.
+ * Replaced the four auto-scrolling marquees: motion carried no information
+ * there (and fought the fixed header); a scannable table reads senior.
+ */
+export async function Skills({ home }: { home: Home }) {
   const skills = home.skills
+  const t = await getTranslations('sections')
 
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="section-pad overflow-hidden">
+    <section id="skills" aria-labelledby="skills-heading" className="section-pad">
       <div className="container-site">
-        <Reveal as="h2" variant="clip" id="skills-heading" className="text-h2 font-semibold text-ink">
+        <SectionEyebrow label={t('skills')} />
+        <Reveal as="h2" variant="clip" id="skills-heading" className="font-serif text-h2 text-ink">
           {skills?.heading}
         </Reveal>
-      </div>
 
-      <div className="mt-14 space-y-8">
-        {(skills?.groups ?? []).map((group, i) => (
-          <div key={group.id}>
-            <p className="container-site mono-label mb-3 text-ink-muted">{group.groupLabel}</p>
-            <Marquee reverse={i % 2 === 1} className="border-y border-line py-4">
-              {(group.items ?? []).map((item) => (
-                <span key={item.id} className="mx-6 whitespace-nowrap text-h3 text-ink">
-                  {item.name}
-                  <span aria-hidden="true" className="ml-12 inline-block h-1.5 w-1.5 rounded-full bg-accent align-middle" />
-                </span>
-              ))}
-            </Marquee>
-          </div>
-        ))}
+        <div className="mt-14 border-t border-line">
+          {(skills?.groups ?? []).map((group) => (
+            <Reveal
+              key={group.id}
+              className="grid gap-y-3 border-b border-line py-7 md:grid-cols-12 md:gap-x-8"
+            >
+              <p className="mono-label text-ink-muted md:col-span-3 md:pt-1">{group.groupLabel}</p>
+              <ul className="flex flex-wrap gap-x-2 gap-y-2 md:col-span-9">
+                {(group.items ?? []).map((item, i) => (
+                  <li key={item.id} className="flex items-center text-body-lg text-ink">
+                    {i > 0 ? (
+                      <span
+                        aria-hidden="true"
+                        className="mx-3 inline-block h-1 w-1 rounded-full bg-accent"
+                      />
+                    ) : null}
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   )

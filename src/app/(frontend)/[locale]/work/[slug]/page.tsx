@@ -4,12 +4,13 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { hasLocale } from 'next-intl'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
-import { RichText } from '@payloadcms/richtext-lexical/react'
+import { RichTextRenderer } from '@/components/richtext/RichTextRenderer'
 import { routing, type Locale } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 import { getCaseStudyBySlug, getPublishedCaseStudies } from '@/lib/data'
 import { Reveal } from '@/components/motion/Reveal'
 import { buttonClasses } from '@/components/ui/Button'
+import { buildLanguageAlternates, buildOpenGraph, absoluteUrl } from '@/lib/seo'
 import type { Media } from '@/payload-types'
 
 export const revalidate = 300
@@ -32,7 +33,22 @@ export async function generateMetadata({
   if (!hasLocale(routing.locales, locale)) return {}
   const cs = await getCaseStudyBySlug(slug, locale)
   if (!cs) return {}
-  return { title: cs.title, description: cs.summary }
+  const cover = cs.coverImage as Media | null
+  return {
+    title: cs.title,
+    description: cs.summary,
+    alternates: {
+      canonical: absoluteUrl(`/${locale}/work/${slug}`),
+      languages: buildLanguageAlternates(`/work/${slug}`),
+    },
+    openGraph: buildOpenGraph({
+      locale,
+      title: cs.title,
+      description: cs.summary,
+      path: `/work/${slug}`,
+      imagePath: cover?.url ?? undefined,
+    }),
+  }
 }
 
 export default async function CaseStudyPage({
@@ -72,6 +88,11 @@ export default async function CaseStudyPage({
           <span className="mono-label text-ink-muted">{cs.year}</span>
           {cs.role ? <span className="mono-label text-ink-muted">{cs.role}</span> : null}
           <span className="mono-label text-accent-strong">{cs.projectType}</span>
+          {cs.confidential ? (
+            <span className="mono-label rounded-full border border-line px-3 py-1 text-ink-muted">
+              {t('confidential')}
+            </span>
+          ) : null}
           {(cs.stack ?? []).map((s) => (
             <span key={s.id} className="mono-label text-ink-muted">
               {s.tech}
@@ -79,18 +100,21 @@ export default async function CaseStudyPage({
           ))}
         </Reveal>
 
-        <Reveal delay={0.3} className="mt-8 flex gap-4">
-          {cs.liveUrl ? (
-            <a href={cs.liveUrl} target="_blank" rel="noopener noreferrer" className={buttonClasses('primary')}>
-              {t('visit')} ↗
-            </a>
-          ) : null}
-          {cs.repoUrl ? (
-            <a href={cs.repoUrl} target="_blank" rel="noopener noreferrer" className={buttonClasses('ghost')}>
-              {t('code')} ↗
-            </a>
-          ) : null}
-        </Reveal>
+        {/* Confidential client work never links out, regardless of what's filled in the CMS. */}
+        {!cs.confidential && (cs.liveUrl || cs.repoUrl) ? (
+          <Reveal delay={0.3} className="mt-8 flex gap-4">
+            {cs.liveUrl ? (
+              <a href={cs.liveUrl} target="_blank" rel="noopener noreferrer" className={buttonClasses('primary')}>
+                {t('visit')} ↗
+              </a>
+            ) : null}
+            {cs.repoUrl ? (
+              <a href={cs.repoUrl} target="_blank" rel="noopener noreferrer" className={buttonClasses('ghost')}>
+                {t('code')} ↗
+              </a>
+            ) : null}
+          </Reveal>
+        ) : null}
       </div>
 
       {cover?.url ? (
@@ -121,9 +145,7 @@ export default async function CaseStudyPage({
 
       {cs.body ? (
         <div className="container-site section-pad">
-          <div className="prose-case mx-auto max-w-3xl space-y-6 text-body-lg text-ink [&_h2]:text-h3 [&_h2]:font-semibold [&_h2]:text-ink [&_h2]:mt-12 [&_h3]:font-semibold [&_img]:rounded-xl [&_a]:text-accent-strong [&_a]:underline-offset-4 hover:[&_a]:underline">
-            <RichText data={cs.body} />
-          </div>
+          <RichTextRenderer data={cs.body} className="mx-auto max-w-3xl" />
         </div>
       ) : null}
 

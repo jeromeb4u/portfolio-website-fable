@@ -1,114 +1,135 @@
 import React from "react";
-import { Reveal } from "@/components/motion/Reveal";
+import { HeroSequence } from "@/components/motion/HeroSequence";
+import { BilingualFlip } from "@/components/motion/BilingualFlip";
+import { HeroParticleScene } from "@/components/motion/HeroParticleScene";
 import { buttonClasses } from "@/components/ui/Button";
-import { ModelViewer } from "@/components/three/ModelViewer";
+import { AvailabilityChip } from "@/components/ui/AvailabilityChip";
 import type { Home, SiteSetting, Media } from "@/payload-types";
-
-// Served from public/models/ for now. Swap to the jsdelivr CDN URL once
-// confirmed rendering correctly:
-// "https://cdn.jsdelivr.net/gh/jeromeb4u/jerome-dmello-portfolio-3d-assets@main/Meshy_AI_Interwoven_Torus_Knot_0716125940_texture.glb"
-const MODEL_SRC = "/models/torus-knot.glb";
-
-const availabilityDot: Record<string, string> = {
-  available: "bg-green-600",
-  open: "bg-green-600",
-  unavailable: "bg-ink-muted",
-};
+import type { Locale } from "@/i18n/routing";
 
 /**
- * Hero (plan/05 A1–A3, plan/01 §5): orange glow field, Instrument Serif display,
- * ID-card availability chip. The 3D slot is RESERVED — renders the CMS poster if
- * set, otherwise a labeled placeholder. Spline mounts here in a later phase.
+ * Typography-led hero. No imagery: the display setting IS the image — full
+ * container width, serif with an italic second line. The availability chip
+ * sits alone above the eyebrow (a status, not a button), and a mono meta row
+ * anchors the bottom of the viewport with the one fact that frames the whole
+ * site: where Jerome is and where he's going.
+ *
+ * Entrance is one orchestrated HeroSequence timeline; the eyebrow runs the
+ * bilingual decode on an ambient loop — the site's only self-playing motion.
  */
 export function Hero({
   home,
   settings,
+  locale,
+  contactFallbackLabel,
+  altEyebrow,
 }: {
   home: Home;
   settings: SiteSetting;
+  locale: Locale;
+  contactFallbackLabel: string;
+  altEyebrow?: string;
 }) {
   const hero = home.hero;
-  const poster = hero?.splinePosterImage as Media | null | undefined;
+
+  // CV download (portfolio-improvements Phase 1): locale-appropriate file,
+  // English fallback. With no CV uploaded the button must never claim to be
+  // a download — it scrolls to Contact under a label that says so.
+  const cvDe = settings.cvDe as Media | null | undefined;
+  const cvEn = settings.cvEn as Media | null | undefined;
+  const cv = locale === "de" ? cvDe ?? cvEn : cvEn;
 
   return (
     <section
       id="hero"
       aria-label="Intro"
-      className="grain relative flex min-h-svh flex-col justify-end overflow-hidden"
+      className="grain relative flex min-h-svh flex-col justify-center pt-24"
     >
-      <div className="glow-field opacity-90" aria-hidden="true" />
+      <div className="container-site grid w-full items-center gap-x-12 gap-y-14 lg:grid-cols-[1.05fr_0.95fr]">
+      <HeroSequence className="w-full">
+        {settings.availabilityNote ? (
+          <div data-seq="0" data-reveal className="mb-10">
+            <AvailabilityChip
+              availability={settings.availability}
+              note={settings.availabilityNote}
+            />
+          </div>
+        ) : null}
 
-      {/* 3D slot — right side on desktop. GLB rendered via <model-viewer>;
-          swap MODEL_SRC to the CDN URL once confirmed working locally. */}
-      <div
-        className="absolute inset-y-0 right-0 hidden w-1/2 items-center justify-center lg:flex"
-        aria-hidden="true"
-      >
-        <div className="h-[60svh] w-[80%]">
-          <ModelViewer
-            src={MODEL_SRC}
-            alt="3D model"
-            poster={poster?.url ?? undefined}
-            className="h-full w-full"
-          />
-        </div>
-      </div>
-
-      <div className="container-site relative z-10 pb-[clamp(4rem,10vh,7rem)] pt-40">
         {hero?.eyebrow ? (
-          <Reveal as="p" delay={0.1} className="mono-label mb-6 text-ink-muted">
-            {hero.eyebrow}
-          </Reveal>
+          <p data-seq="1" data-reveal className="mono-label mb-6 text-ink-muted">
+            {altEyebrow ? (
+              <BilingualFlip ambient text={hero.eyebrow} altText={altEyebrow} />
+            ) : (
+              hero.eyebrow
+            )}
+          </p>
         ) : null}
 
-        <Reveal
-          as="h1"
-          variant="clip"
-          className="max-w-5xl font-serif text-display text-ink"
-        >
-          {hero?.headingLine1}
+        <h1 className="max-w-[22ch] font-serif text-[clamp(3rem,6.5vw,6.5rem)] leading-[0.98] tracking-[-0.02em] text-ink">
+          <span data-seq="2" data-reveal="clip" className="block">
+            {hero?.headingLine1}
+          </span>
           {hero?.headingLine2 ? (
-            <>
-              <br />
-              <em className="serif-italic">{hero.headingLine2}</em>
-            </>
-          ) : null}
-        </Reveal>
-
-        {hero?.subheading ? (
-          <Reveal
-            as="p"
-            delay={0.25}
-            className="mt-8 max-w-xl text-body-lg text-ink-muted"
-          >
-            {hero.subheading}
-          </Reveal>
-        ) : null}
-
-        <Reveal delay={0.4} className="mt-10 flex flex-wrap items-center gap-4">
-          {hero?.primaryCtaLabel ? (
-            <a href="#work" className={buttonClasses("primary")}>
-              {hero.primaryCtaLabel}
-            </a>
-          ) : null}
-          {hero?.secondaryCtaLabel ? (
-            <a href="#contact" className={buttonClasses("ghost")}>
-              {hero.secondaryCtaLabel}
-            </a>
-          ) : null}
-
-          {/* ID-card availability chip (R5) */}
-          {settings.availabilityNote ? (
-            <span className="ml-0 inline-flex items-center gap-2.5 rounded-full border border-line bg-bg/70 py-2 pl-3 pr-4 backdrop-blur-sm sm:ml-2">
-              <span
-                className={`h-2 w-2 rounded-full animate-pulse-dot ${availabilityDot[settings.availability] ?? "bg-green-600"}`}
-              />
-              <span className="mono-label text-ink">
-                {settings.availabilityNote}
-              </span>
+            <span data-seq="3" data-reveal="clip" className="block">
+              <em className="serif-italic text-ink-muted">{hero.headingLine2}</em>
             </span>
           ) : null}
-        </Reveal>
+        </h1>
+
+        <div className="mt-12 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-xl">
+            {hero?.subheading ? (
+              <p data-seq="4" data-reveal className="text-body-lg text-ink-muted">
+                {hero.subheading}
+              </p>
+            ) : null}
+
+            <div data-seq="5" data-reveal className="mt-8 flex flex-wrap items-center gap-4">
+              {hero?.primaryCtaLabel ? (
+                <a href="#work" className={buttonClasses("primary")}>
+                  {hero.primaryCtaLabel}
+                </a>
+              ) : null}
+              {cv?.url ? (
+                <a href={cv.url} download className={buttonClasses("ghost")}>
+                  {hero?.secondaryCtaLabel}
+                </a>
+              ) : (
+                <a href="#contact" className={buttonClasses("ghost")}>
+                  {contactFallbackLabel}
+                </a>
+              )}
+            </div>
+          </div>
+
+          {settings.location ? (
+            <p data-seq="6" data-reveal className="mono-label shrink-0 text-ink-muted">
+              {settings.location}
+            </p>
+          ) : null}
+        </div>
+      </HeroSequence>
+
+        {/* Particle portrait — mouse-repulsion lens over a dotted likeness.
+            Sits directly on the site's starfield (no panel) like the reference. */}
+        <div
+          className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[5/6]"
+        >
+          {/* warm rust glow bleeding from behind the head */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(60% 55% at 55% 42%, rgba(157,60,17,0.28), rgba(14,14,13,0) 70%)",
+            }}
+          />
+          <HeroParticleScene src="/images/portrait.png" className="relative z-10 h-full w-full" />
+          <p className="mono-label pointer-events-none absolute bottom-4 right-5 z-20 text-[0.65rem] text-inverse-muted">
+            Hover to reveal · Click for full view
+          </p>
+        </div>
       </div>
     </section>
   );

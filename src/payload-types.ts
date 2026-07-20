@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     'case-studies': CaseStudy;
+    posts: Post;
     'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -81,6 +82,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -238,6 +240,57 @@ export interface CaseStudy {
    * Lower numbers appear first
    */
   order?: number | null;
+  /**
+   * Shown on the homepage Work grid. Unfeatured studies still appear on /work.
+   */
+  featured?: boolean | null;
+  /**
+   * Client work under NDA — shown with a badge, no live/repo links rendered.
+   */
+  confidential?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  /**
+   * kebab-case, stable across locales, used in the URL
+   */
+  slug: string;
+  summary: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  publishedDate: string;
+  coverImage?: (number | null) | Media;
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * German copy is AI-drafted and not yet proofread
+   */
+  needsGermanReview?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -292,6 +345,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'case-studies';
         value: number | CaseStudy;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'contact-submissions';
@@ -410,6 +467,30 @@ export interface CaseStudiesSelect<T extends boolean = true> {
       };
   needsGermanReview?: T;
   order?: T;
+  featured?: T;
+  confidential?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  summary?: T;
+  body?: T;
+  publishedDate?: T;
+  coverImage?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  needsGermanReview?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -566,6 +647,10 @@ export interface Home {
       | {
           company: string;
           role: string;
+          /**
+           * Short story beat shown above the role, e.g. "Where it began"
+           */
+          narrativeHeadline?: string | null;
           clientNote?: string | null;
           dateStart: string;
           dateEnd?: string | null;
@@ -602,6 +687,10 @@ export interface Home {
   };
   recommendations?: {
     heading?: string | null;
+    /**
+     * "More on LinkedIn" outlink shown beneath the quotes. Leave empty to hide.
+     */
+    linkedinRecommendationsUrl?: string | null;
     entries?:
       | {
           quote: string;
@@ -620,6 +709,20 @@ export interface Home {
         }[]
       | null;
   };
+  /**
+   * Optional recognition list. Section is hidden entirely while empty.
+   */
+  awards?:
+    | {
+        /**
+         * Free-form, e.g. "Sep 2023"
+         */
+        date: string;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   contact?: {
     heading?: string | null;
     body?: string | null;
@@ -775,6 +878,7 @@ export interface HomeSelect<T extends boolean = true> {
           | {
               company?: T;
               role?: T;
+              narrativeHeadline?: T;
               clientNote?: T;
               dateStart?: T;
               dateEnd?: T;
@@ -816,6 +920,7 @@ export interface HomeSelect<T extends boolean = true> {
     | T
     | {
         heading?: T;
+        linkedinRecommendationsUrl?: T;
         entries?:
           | T
           | {
@@ -827,6 +932,14 @@ export interface HomeSelect<T extends boolean = true> {
               consentConfirmed?: T;
               id?: T;
             };
+      };
+  awards?:
+    | T
+    | {
+        date?: T;
+        title?: T;
+        description?: T;
+        id?: T;
       };
   contact?:
     | T

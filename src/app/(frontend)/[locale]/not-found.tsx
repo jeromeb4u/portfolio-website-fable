@@ -11,9 +11,8 @@ export default async function NotFound() {
   const nf = settings.notFound
 
   return (
-    <section className="grain relative flex min-h-svh flex-col items-start justify-center overflow-hidden">
-      <div className="glow-field opacity-60" aria-hidden="true" />
-      <div className="container-site relative z-10">
+    <section className="grain relative flex min-h-svh flex-col items-start justify-center">
+      <div className="container-site">
         <p className="mono-label text-ink-muted">404</p>
         <h1 className="mt-4 font-serif text-display text-ink">{nf?.heading ?? 'Page not found'}</h1>
         {nf?.body ? <p className="mt-6 max-w-md text-body-lg text-ink-muted">{nf.body}</p> : null}

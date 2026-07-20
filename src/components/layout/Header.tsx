@@ -4,41 +4,65 @@ import React, { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { buttonClasses } from '@/components/ui/Button'
+import { BilingualFlip } from '@/components/motion/BilingualFlip'
 
-type NavItem = { label: string; anchor: string; id?: string | null }
+type NavItem = { label: string; anchor: string; altLabel: string; id?: string | null }
 
 /**
  * Hide-on-scroll-down / show-on-up header (plan/05 A4). Client component:
  * needs scroll listeners + mobile menu state. Content comes from CMS via props.
+ * Desktop nav labels + CTA run the bilingual decode flip on hover/focus; over
+ * the dark footer the chrome recolors to inverse via an IO sentinel.
  */
 export function Header({
   siteName,
   items,
   ctaLabel,
+  ctaAltLabel,
   openMenuLabel,
   closeMenuLabel,
 }: {
   siteName: string
   items: NavItem[]
   ctaLabel: string
+  ctaAltLabel: string
   openMenuLabel: string
   closeMenuLabel: string
 }) {
   const [hidden, setHidden] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [overDark, setOverDark] = useState(false)
   const lastY = useRef(0)
 
   useEffect(() => {
-    const onScroll = () => {
+    // Lenis (SmoothScrollProvider) drives scroll via requestAnimationFrame and
+    // doesn't reliably dispatch native 'scroll' events on window, so this polls
+    // scrollY every frame instead of listening for one.
+    let raf: number
+    const tick = () => {
       const y = window.scrollY
       setScrolled(y > 24)
       setHidden(y > 120 && y > lastY.current && !open)
       lastY.current = y
+      raf = requestAnimationFrame(tick)
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
   }, [open])
+
+  useEffect(() => {
+    // Recolor chrome to inverse exactly when the dark footer sits under the
+    // header band: a zero-height root line 72px from the top.
+    const footer = document.querySelector('footer')
+    if (!footer) return
+    const io = new IntersectionObserver(
+      ([e]) => setOverDark(e.isIntersecting),
+      { rootMargin: '-72px 0px -100% 0px' },
+    )
+    io.observe(footer)
+    return () => io.disconnect()
+  }, [])
 
   const goTo = (anchor: string) => (e: React.MouseEvent) => {
     e.preventDefault()
@@ -56,12 +80,17 @@ export function Header({
       <div
         className={cn(
           'container-site flex items-center justify-between py-4 transition-colors duration-300',
-          scrolled && 'backdrop-blur-md',
+          scrolled && 'bg-bg/60 backdrop-blur-md',
+          overDark && 'text-inverse-text',
         )}
-        style={scrolled ? { backgroundColor: 'rgb(250 250 248 / 0.82)' } : undefined}
       >
-        <a href="#hero" onClick={goTo('hero')} className="mono-label text-ink">
+        <a
+          href="#hero"
+          onClick={goTo('hero')}
+          className={cn('mono-label transition-colors duration-300', overDark ? 'text-inverse-text' : 'text-ink')}
+        >
           {siteName}
+          <span className="text-accent-strong">.</span>
         </a>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
@@ -70,14 +99,19 @@ export function Header({
               key={item.anchor}
               href={`#${item.anchor}`}
               onClick={goTo(item.anchor)}
-              className="mono-label text-ink-muted transition-colors duration-300 hover:text-ink"
+              className={cn(
+                'link-underline mono-label transition-colors duration-300',
+                overDark
+                  ? 'text-inverse-muted hover:text-inverse-text'
+                  : 'text-ink-muted hover:text-ink',
+              )}
             >
-              {item.label}
+              <BilingualFlip text={item.label} altText={item.altLabel} />
             </a>
           ))}
           <LocaleSwitcher className="mono-label" />
           <a href="#contact" onClick={goTo('contact')} className={buttonClasses('primary', 'px-5 py-2 text-xs')}>
-            {ctaLabel}
+            <BilingualFlip text={ctaLabel} altText={ctaAltLabel} />
           </a>
         </nav>
 
@@ -85,7 +119,7 @@ export function Header({
           <LocaleSwitcher className="mono-label" />
           <button
             type="button"
-            className="mono-label text-ink"
+            className={cn('mono-label transition-colors duration-300', overDark ? 'text-inverse-text' : 'text-ink')}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
