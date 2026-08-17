@@ -7,7 +7,30 @@
     "errorReload": "Etwas ist schiefgelaufen. Bitte lade die Seite neu."
   },
   "hero": {
-    "getInTouch": "Kontakt aufnehmen"
+    "getInTouch": "Kontakt aufnehmen",
+    "scrollCue": "Weiter scrollen"
+  },
+  "pages": {
+    "aboutEyebrow": "[ Über mich ]",
+    "aboutTitle": "Über mich",
+    "aboutDescription": "Frontend-Entwickler — fünfeinhalb Jahre Enterprise-Angular, heute React-Apps und KI-Tools, Umzug nach Deutschland geplant.",
+    "aboutLede": "Die lange Fassung: wohin die Enterprise-Jahre gingen, was ich heute baue und wohin es geht.",
+    "recognitionEyebrow": "[ Auszeichnungen ]",
+    "recognitionTitle": "Stimmen",
+    "recognitionDescription": "Was Kolleginnen, Kollegen und Kunden über die Zusammenarbeit mit Jerome D'mello sagen.",
+    "recognitionLede": "Die Menschen, mit denen ich geliefert habe — in ihren eigenen Worten.",
+    "writingEyebrow": "[ Beiträge ]",
+    "writingLede": "Notizen zu Migrationen, Frontend-Praxis und KI-Tools, die tatsächlich in Benutzung bleiben."
+  },
+  "rail": {
+    "work": "Projekte",
+    "recommendations": "Stimmen",
+    "about": "Über mich",
+    "skills": "Systeme",
+    "experience": "Werdegang",
+    "writing": "Artikel",
+    "recognition": "Auszeichnungen",
+    "contact": "Kontakt"
   },
   "meta": {
     "title": "Jerome D'mello — Frontend-Entwickler (React, Angular) & AI-Tool-Entwickler",
@@ -47,15 +70,15 @@
     "moreOnLinkedin": "Mehr auf LinkedIn"
   },
   "sections": {
-    "about": "Über mich — 01",
-    "experience": "Erfahrung — 02",
-    "experienceLede": "Der bisherige Weg – von großen Enterprise-Plattformen zu unabhängiger React- und KI-getriebener Produktarbeit.",
-    "experienceStart": "Anfänge",
-    "experienceEnd": "Heute",
-    "skills": "Skills — 03",
-    "work": "Projekte — 04",
-    "recommendations": "Empfehlungen — 05",
-    "contact": "Kontakt — 06"
+    "about": "[ Über mich ]",
+    "experience": "[ Mein Weg ]",
+    "experienceLede": "Der bisherige Weg – von unabhängiger React- und KI-getriebener Produktarbeit heute zurück zu den Enterprise-Plattformen, wo alles begann.",
+    "experienceStart": "Heute",
+    "experienceEnd": "Anfänge",
+    "skills": "[ Systeme & Tooling ]",
+    "work": "[ Ausgewählte Projekte ]",
+    "recommendations": "[ Stimmen ]",
+    "contact": "[ Kontakt ]"
   },
   "awards": {
     "heading": "Auszeichnungen"

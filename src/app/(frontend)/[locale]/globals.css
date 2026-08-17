@@ -6,12 +6,14 @@
 */
 @theme {
   /* Dark theme (cohesive with the particle hero / reference site). The page is
-     a near-black warm base; a fixed ambient starfield sits behind translucent
-     sections, so `surface` is a faint lift rather than a solid fill. */
+     one flat near-black warm base under a page-wide film grain — the only
+     ambient motion on the site is the hero's own WebGL dust, so `surface` is a
+     faint lift rather than a solid fill. */
   --color-bg: #0d0d0c; /* base + solid chrome (buttons, chips, header) */
-  --color-surface: rgb(245 242 235 / 0.035); /* translucent lift over the starfield */
+  --color-surface: rgb(245 242 235 / 0.035); /* translucent lift over the base */
   --color-ink: #ece7dd; /* warm off-white text (matches particle cream) */
   --color-ink-muted: #9d968b;
+  --color-ink-faint: #6f6a62; /* third tier — the hero's disciplines line */
   --color-accent: #c56033; /* lifted oxide rust — large text (≥24px) & graphics only */
   --color-accent-strong: #d07a4a; /* links + small accent text on dark */
   --color-line: rgb(236 231 221 / 0.12);
@@ -96,14 +98,25 @@ body {
 
 /* ---------- utilities tied to signature moves (01-design-system.md §5) ---------- */
 
+/* `width: 100%` is load-bearing: inside a flex column (the hero) an auto
+   inline margin on a stretched item makes it shrink to its content, which
+   silently centred the hero copy instead of pinning it left. */
 @utility container-site {
+  width: 100%;
   margin-inline: auto;
   max-width: 80rem;
   padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
+/* Section rhythm — 6rem, opening to 8rem from `md` up. Matches the hero's own
+   py-24 so the scroll cadence is even from the first section down. */
 @utility section-pad {
-  padding-block: clamp(6rem, 14vh, 11rem);
+  padding-block: 6rem;
+}
+@media (width >= 48rem) {
+  .section-pad {
+    padding-block: 8rem;
+  }
 }
 
 @utility mono-label {
@@ -119,7 +132,21 @@ body {
   font-weight: 400;
 }
 
-/* 3–4% film grain (R1). Apply on a pseudo-layer wrapper. */
+/* Page-wide film grain (R1) — one fixed layer over the entire document, above
+   every section and the hero canvas, below nothing. This is the site's whole
+   background treatment: a flat warm near-black plus this grain. */
+.grain-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Local 3–4% grain for panels that sit on their own fill (footer, contact).
+   Apply on a pseudo-layer wrapper. */
 @utility grain {
   position: relative;
 }
@@ -170,7 +197,7 @@ body {
    see content immediately. */
 html.motion-ok [data-reveal] {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(48px);
 }
 html.motion-ok [data-reveal='clip'] {
   clip-path: inset(0 0 100% 0);

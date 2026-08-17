@@ -19,6 +19,7 @@ import { Recommendations } from '@/components/sections/Recommendations'
 import { Awards } from '@/components/sections/Awards'
 import { WritingPreview } from '@/components/sections/WritingPreview'
 import { Contact } from '@/components/sections/Contact'
+import { SectionRail } from '@/components/layout/SectionRail'
 
 // Content edits in /backstage revalidate via afterChange hooks; this is a fallback.
 export const revalidate = 300
@@ -40,6 +41,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       getTranslations('hero'),
       getTranslations('work'),
     ])
+  const tRail = await getTranslations('rail')
 
   // Consent gate: quotes appear only after written approval from the author.
   const recommendations = (home.recommendations?.entries ?? []).filter(
@@ -49,18 +51,39 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   // studies" link only appears when the archive holds more than what's shown.
   const hasMoreCaseStudies = allCaseStudies.length > featuredCaseStudies.length
 
+  // Rail order mirrors the page order below, and only lists sections that
+  // actually render — Recommendations, Writing and Awards all return null on
+  // empty CMS content, and a marker pointing at a missing id is a dead click.
+  const railItems = [
+    { id: 'work', label: tRail('work') },
+    ...(recommendations.length > 0
+      ? [{ id: 'recommendations', label: tRail('recommendations') }]
+      : []),
+    { id: 'about', label: tRail('about') },
+    { id: 'skills', label: tRail('skills') },
+    { id: 'experience', label: tRail('experience') },
+    ...(posts.length > 0 ? [{ id: 'writing', label: tRail('writing') }] : []),
+    ...((home.awards ?? []).length > 0
+      ? [{ id: 'recognition', label: tRail('recognition') }]
+      : []),
+    { id: 'contact', label: tRail('contact') },
+  ]
+
   return (
     <>
+      <SectionRail items={railItems} />
       <Hero
         home={home}
         settings={settings}
         locale={locale as Locale}
         contactFallbackLabel={tHero('getInTouch')}
+        scrollCueLabel={tHero('scrollCue')}
         altEyebrow={altHome.hero?.eyebrow ?? undefined}
       />
-      <About home={home} />
-      <Experience home={home} />
-      <Skills home={home} />
+      {/* Section order mirrors the reference site: work first (proof before
+          biography), then testimonials, about, the systems/skills grid, the
+          career timeline, writing, and the recognition callout. Contact closes
+          the page. */}
       <Work
         home={home}
         caseStudies={featuredCaseStudies}
@@ -69,8 +92,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         locale={locale as Locale}
       />
       <Recommendations home={home} entries={recommendations} />
-      <Awards home={home} />
+      <About home={home} />
+      <Skills home={home} />
+      <Experience home={home} />
       <WritingPreview posts={posts} locale={locale as Locale} />
+      <Awards home={home} />
       <Contact home={home} settings={settings} />
     </>
   )

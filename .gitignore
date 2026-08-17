@@ -16,3 +16,4 @@ dev.db
 
 # Build artifacts
 tsconfig.tsbuildinfo
+dev.db.bak

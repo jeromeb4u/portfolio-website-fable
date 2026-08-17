@@ -155,9 +155,9 @@ export const runSeed = async (payload: Payload): Promise<void> => {
     locale: 'en',
     data: {
       items: [
+        { label: 'Work', anchor: 'work' },
         { label: 'About', anchor: 'about' },
         { label: 'Experience', anchor: 'experience' },
-        { label: 'Work', anchor: 'work' },
         { label: 'Contact', anchor: 'contact' },
       ],
       ctaLabel: 'Get in touch',
@@ -169,9 +169,9 @@ export const runSeed = async (payload: Payload): Promise<void> => {
     locale: 'de',
     data: mergeIds({
       items: [
+        { label: 'Projekte', anchor: 'work' },
         { label: 'Über mich', anchor: 'about' },
         { label: 'Erfahrung', anchor: 'experience' },
-        { label: 'Projekte', anchor: 'work' },
         { label: 'Kontakt', anchor: 'contact' },
       ],
       ctaLabel: 'Kontakt aufnehmen',

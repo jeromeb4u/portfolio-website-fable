@@ -2,11 +2,73 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Link, usePathname } from '@/i18n/navigation'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { buttonClasses } from '@/components/ui/Button'
 import { BilingualFlip } from '@/components/motion/BilingualFlip'
 
-type NavItem = { label: string; anchor: string; altLabel: string; id?: string | null }
+export type NavItem = {
+  label: string
+  altLabel: string
+  /** 'page' → a real route; 'section' → a homepage anchor. */
+  kind: 'page' | 'section'
+  anchor?: string | null
+  href?: string | null
+}
+
+const itemKey = (item: NavItem) => `${item.kind}:${item.href ?? item.anchor ?? item.label}`
+
+/**
+ * One nav item, rendered three ways:
+ *   page                → a real route (next-intl Link, locale-prefixed)
+ *   section, on home    → in-page smooth scroll
+ *   section, on subpage → back to the homepage carrying the hash
+ */
+function NavLink({
+  item,
+  onHome,
+  onNavigate,
+  className,
+  children,
+}: {
+  item: NavItem
+  onHome: boolean
+  onNavigate: () => void
+  className?: string
+  children: React.ReactNode
+}) {
+  if (item.kind === 'page' && item.href) {
+    return (
+      <Link href={item.href} className={className} onClick={onNavigate}>
+        {children}
+      </Link>
+    )
+  }
+
+  const anchor = item.anchor ?? ''
+
+  if (!onHome) {
+    return (
+      <Link href={`/#${anchor}`} className={className} onClick={onNavigate}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <a
+      href={`#${anchor}`}
+      className={className}
+      onClick={(e) => {
+        e.preventDefault()
+        onNavigate()
+        document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
+      }}
+    >
+      {children}
+    </a>
+  )
+}
 
 /**
  * Hide-on-scroll-down / show-on-up header (plan/05 A4). Client component:
@@ -34,6 +96,8 @@ export function Header({
   const [open, setOpen] = useState(false)
   const [overDark, setOverDark] = useState(false)
   const lastY = useRef(0)
+  const pathname = usePathname()
+  const onHome = pathname === '/'
 
   useEffect(() => {
     // Lenis (SmoothScrollProvider) drives scroll via requestAnimationFrame and
@@ -64,11 +128,7 @@ export function Header({
     return () => io.disconnect()
   }, [])
 
-  const goTo = (anchor: string) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    setOpen(false)
-    document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const closeMenu = () => setOpen(false)
 
   return (
     <header
@@ -84,21 +144,27 @@ export function Header({
           overDark && 'text-inverse-text',
         )}
       >
-        <a
-          href="#hero"
-          onClick={goTo('hero')}
-          className={cn('mono-label transition-colors duration-300', overDark ? 'text-inverse-text' : 'text-ink')}
+        {/* The wordmark is a route, not an anchor — it has to work from any
+            page, not just the homepage. */}
+        <Link
+          href="/"
+          onClick={closeMenu}
+          className={cn(
+            'mono-label transition-colors duration-300',
+            overDark ? 'text-inverse-text' : 'text-ink',
+          )}
         >
           {siteName}
           <span className="text-accent-strong">.</span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
           {items.map((item) => (
-            <a
-              key={item.anchor}
-              href={`#${item.anchor}`}
-              onClick={goTo(item.anchor)}
+            <NavLink
+              key={itemKey(item)}
+              item={item}
+              onHome={onHome}
+              onNavigate={closeMenu}
               className={cn(
                 'link-underline mono-label transition-colors duration-300',
                 overDark
@@ -107,12 +173,17 @@ export function Header({
               )}
             >
               <BilingualFlip text={item.label} altText={item.altLabel} />
-            </a>
+            </NavLink>
           ))}
           <LocaleSwitcher className="mono-label" />
-          <a href="#contact" onClick={goTo('contact')} className={buttonClasses('primary', 'px-5 py-2 text-xs')}>
+          <NavLink
+            item={{ label: ctaLabel, altLabel: ctaAltLabel, kind: 'section', anchor: 'contact' }}
+            onHome={onHome}
+            onNavigate={closeMenu}
+            className={buttonClasses('primary', 'px-5 py-2 text-xs')}
+          >
             <BilingualFlip text={ctaLabel} altText={ctaAltLabel} />
-          </a>
+          </NavLink>
         </nav>
 
         <div className="flex items-center gap-4 md:hidden">
@@ -137,18 +208,24 @@ export function Header({
       >
         <nav className="container-site flex flex-col gap-5 py-6" aria-label="Mobile">
           {items.map((item) => (
-            <a
-              key={item.anchor}
-              href={`#${item.anchor}`}
-              onClick={goTo(item.anchor)}
+            <NavLink
+              key={itemKey(item)}
+              item={item}
+              onHome={onHome}
+              onNavigate={closeMenu}
               className="text-h3 font-medium text-ink"
             >
               {item.label}
-            </a>
+            </NavLink>
           ))}
-          <a href="#contact" onClick={goTo('contact')} className={buttonClasses('primary', 'self-start')}>
+          <NavLink
+            item={{ label: ctaLabel, altLabel: ctaAltLabel, kind: 'section', anchor: 'contact' }}
+            onHome={onHome}
+            onNavigate={closeMenu}
+            className={buttonClasses('primary', 'self-start')}
+          >
             {ctaLabel}
-          </a>
+          </NavLink>
         </nav>
       </div>
     </header>

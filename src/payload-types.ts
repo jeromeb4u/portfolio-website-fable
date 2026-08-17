@@ -585,10 +585,15 @@ export interface Navigation {
   items?:
     | {
         label: string;
+        kind?: ('section' | 'page') | null;
         /**
          * Section id without #, e.g. "work"
          */
-        anchor: string;
+        anchor?: string | null;
+        /**
+         * Route path without the locale prefix, e.g. "/work"
+         */
+        href?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -603,10 +608,26 @@ export interface Navigation {
 export interface Home {
   id: number;
   hero: {
+    /**
+     * Disciplines line under the location, e.g. "Frontend Engineer · React & Next.js · …"
+     */
     eyebrow?: string | null;
+    /**
+     * First name — the hero heading is the name, set huge, over two lines
+     */
     headingLine1: string;
+    /**
+     * Surname
+     */
     headingLine2?: string | null;
+    /**
+     * Lead line, one sentence, set large
+     */
     subheading?: string | null;
+    /**
+     * Supporting paragraph under the lead, set small
+     */
+    body?: string | null;
     primaryCtaLabel?: string | null;
     secondaryCtaLabel?: string | null;
     splinePosterImage?: (number | null) | Media;
@@ -830,7 +851,9 @@ export interface NavigationSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
+        kind?: T;
         anchor?: T;
+        href?: T;
         id?: T;
       };
   ctaLabel?: T;
@@ -850,6 +873,7 @@ export interface HomeSelect<T extends boolean = true> {
         headingLine1?: T;
         headingLine2?: T;
         subheading?: T;
+        body?: T;
         primaryCtaLabel?: T;
         secondaryCtaLabel?: T;
         splinePosterImage?: T;

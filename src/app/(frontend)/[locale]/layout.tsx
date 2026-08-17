@@ -9,7 +9,6 @@ import { routing, type Locale } from "@/i18n/routing";
 import { getSiteSettings, getNavigation } from "@/lib/data";
 import { buildLanguageAlternates, buildOpenGraph, absoluteUrl } from "@/lib/seo";
 import { SmoothScrollProvider } from "@/components/motion/SmoothScrollProvider";
-import { AmbientBackground } from "@/components/motion/AmbientBackground";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PersonJsonLd } from "@/components/seo/PersonJsonLd";
@@ -93,7 +92,6 @@ export default async function LocaleLayout({
       className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
     >
       <body>
-        <AmbientBackground />
         <PersonJsonLd
           email={settings.email}
           socialUrls={(settings.socials ?? [])
@@ -102,40 +100,47 @@ export default async function LocaleLayout({
         />
         <NextIntlClientProvider>
           <SmoothScrollProvider>
-            <a
-              href="#content"
-              className="mono-label sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-bg"
-            >
-              {tCommon("skipToContent")}
-            </a>
-            <Header
-              siteName={settings.siteName}
-              items={(navigation.items ?? []).map((i, idx) => ({
-                label: i.label,
-                anchor: i.anchor,
-                altLabel: altItems[idx]?.label ?? i.label,
-              }))}
-              ctaLabel={navigation.ctaLabel}
-              ctaAltLabel={altNavigation.ctaLabel ?? navigation.ctaLabel}
-              openMenuLabel={tCommon("openMenu")}
-              closeMenuLabel={tCommon("closeMenu")}
-            />
-            <main id="content">{children}</main>
-            <Footer
-              siteName={settings.siteName}
-              tagline={settings.tagline}
-              email={settings.email}
-              socials={(settings.socials ?? []).map((s) => ({
-                platform: s.platform,
-                url: s.url,
-              }))}
-              availability={settings.availability}
-              availabilityNote={settings.availabilityNote ?? undefined}
-              contactLabel={tFooter("contact")}
-              imprintLabel={tFooter("imprint")}
-              privacyLabel={tFooter("privacy")}
-              locale={locale}
-            />
+            {/* One shell carries the page-wide grain over everything below. */}
+            <div className="grain-page flex min-h-svh flex-col overflow-x-clip">
+              <a
+                href="#content"
+                className="mono-label sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-bg"
+              >
+                {tCommon("skipToContent")}
+              </a>
+              <Header
+                siteName={settings.siteName}
+                items={(navigation.items ?? []).map((i, idx) => ({
+                  label: i.label,
+                  kind: i.kind === 'page' ? ('page' as const) : ('section' as const),
+                  anchor: i.anchor,
+                  href: i.href,
+                  altLabel: altItems[idx]?.label ?? i.label,
+                }))}
+                ctaLabel={navigation.ctaLabel}
+                ctaAltLabel={altNavigation.ctaLabel ?? navigation.ctaLabel}
+                openMenuLabel={tCommon("openMenu")}
+                closeMenuLabel={tCommon("closeMenu")}
+              />
+              <main id="content" className="flex-1">
+                {children}
+              </main>
+              <Footer
+                siteName={settings.siteName}
+                tagline={settings.tagline}
+                email={settings.email}
+                socials={(settings.socials ?? []).map((s) => ({
+                  platform: s.platform,
+                  url: s.url,
+                }))}
+                availability={settings.availability}
+                availabilityNote={settings.availabilityNote ?? undefined}
+                contactLabel={tFooter("contact")}
+                imprintLabel={tFooter("imprint")}
+                privacyLabel={tFooter("privacy")}
+                locale={locale}
+              />
+            </div>
             <Toaster position="bottom-right" />
           </SmoothScrollProvider>
         </NextIntlClientProvider>

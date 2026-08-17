@@ -12,7 +12,7 @@ export function Awards({ home }: { home: Home }) {
   if (awards.length === 0) return null;
 
   return (
-    <section aria-labelledby="awards-heading" className="section-pad">
+    <section id="recognition" aria-labelledby="awards-heading" className="section-pad">
       <div className="container-site">
         <Reveal as="p" id="awards-heading" className="mono-label text-ink-muted">
           [ RECOGNITION ]

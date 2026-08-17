@@ -25,12 +25,20 @@ const show = (c: string) => (c === ' ' ? ' ' : c)
 
 type Slot = { ch: string; on: boolean }
 
+/** Both languages share one slot count (the longer word), so a slot past the
+ *  end of the shorter string renders blank rather than shifting the layout. */
+const buildSlots = (s: string, n: number): Slot[] =>
+  Array.from({ length: n }, (_, i) => ({ ch: show(s[i] ?? ''), on: i < s.length }))
+
 export function BilingualFlip({
-  text,
-  altText,
+  // Both default to '': a CMS row can exist in one locale and not the other,
+  // and a missing label must render nothing rather than crash the page.
+  text = '',
+  altText = '',
   as: Tag = 'span',
   className,
   ambient = false,
+  once = false,
 }: {
   text: string
   altText: string
@@ -38,21 +46,28 @@ export function BilingualFlip({
   className?: string
   /** self-playing loop (hero eyebrow) instead of hover/focus driven */
   ambient?: boolean
+  /** decode once on mount and stop — for long lines a loop would churn */
+  once?: boolean
 }) {
   const n = Math.max(text.length, altText.length)
-  const build = (s: string): Slot[] =>
-    Array.from({ length: n }, (_, i) => ({ ch: show(s[i] ?? ''), on: i < s.length }))
 
-  const [slots, setSlots] = useState<Slot[]>(() => build(text))
+  const [slots, setSlots] = useState<Slot[]>(() => buildSlots(text, n))
   const rootRef = useRef<HTMLElement>(null)
   const rafRef = useRef<number | null>(null)
   const targetRef = useRef(text)
-  const dispRef = useRef<Slot[]>(slots)
-  dispRef.current = slots
+  // Mirrors the rendered glyphs so an interrupted decode can reverse from
+  // whatever is on screen. Written only where slots are committed — never
+  // during render, which would be a ref write in the render phase.
+  const dispRef = useRef<Slot[] | null>(null)
 
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
+
+    const commit = (next: Slot[]) => {
+      dispRef.current = next
+      setSlots(next)
+    }
 
     const canCycle = () =>
       document.documentElement.classList.contains('motion-ok') &&
@@ -65,7 +80,7 @@ export function BilingualFlip({
     const setInstant = (s: string) => {
       stop()
       targetRef.current = s
-      setSlots(build(s))
+      commit(buildSlots(s, n))
     }
 
     // Interruptible decode: reverses from current glyphs, never queues.
@@ -74,7 +89,7 @@ export function BilingualFlip({
       targetRef.current = s
       if (!canCycle()) return setInstant(s)
       stop()
-      const cur = dispRef.current.map((x) => x.ch)
+      const cur = (dispRef.current ?? buildSlots(targetRef.current, n)).map((x) => x.ch)
       const start = performance.now()
       const bucket = new Array(n).fill(-1)
       const tick = (now: number) => {
@@ -95,10 +110,26 @@ export function BilingualFlip({
             cur[i] = show(tc)
           }
         }
-        setSlots(cur.map((ch, i) => ({ ch, on: i < s.length })))
+        commit(cur.map((ch, i) => ({ ch, on: i < s.length })))
         rafRef.current = done ? null : requestAnimationFrame(tick)
       }
       rafRef.current = requestAnimationFrame(tick)
+    }
+
+    // One-shot decode: the text resolves out of random glyphs shortly after
+    // load and then stays put. Long lines (the hero's disciplines list) would
+    // churn distractingly on a loop, and the reference decodes once too.
+    if (once) {
+      if (!canCycle()) return
+      const start = window.setTimeout(() => {
+        commit(buildSlots(text, n).map((slot) => ({ ...slot, ch: slot.on ? rnd() : slot.ch })))
+        targetRef.current = ''
+        animateTo(text)
+      }, 500)
+      return () => {
+        window.clearTimeout(start)
+        stop()
+      }
     }
 
     if (ambient) {
@@ -149,13 +180,36 @@ export function BilingualFlip({
       trigger.removeEventListener('blur', toBase)
       stop()
     }
-  }, [text, altText, ambient, n])
+  }, [text, altText, ambient, once, n])
+
+  // Each glyph is its own inline-block, which the browser treats as a wrap
+  // opportunity — so a long line breaks mid-word. Grouping slots into words and
+  // pinning each word `nowrap` keeps the per-character animation and restores
+  // normal word wrapping. The trailing space stays inside its word so the gap
+  // still collapses at a line end.
+  const words: { slot: Slot; index: number }[][] = []
+  let word: { slot: Slot; index: number }[] = []
+  slots.forEach((slot, index) => {
+    word.push({ slot, index })
+    // `show` renders spaces as NBSP so an empty slot keeps its width; test for
+    // both so word grouping still finds the boundaries.
+    if (slot.ch === ' ' || slot.ch === ' ') {
+      words.push(word)
+      word = []
+    }
+  })
+  if (word.length > 0) words.push(word)
 
   return (
     <Tag ref={rootRef} className={className}>
       <span className="sr-only">{text}</span>
       <span aria-hidden="true">
-        {slots.map((s, i) => (
+        {words.map((group, wordIndex) => (
+          <React.Fragment key={wordIndex}>
+            {/* nowrap kills wrap opportunities *inside* the word; the <wbr />
+                after it puts exactly one back, between words. */}
+            <span style={{ whiteSpace: 'nowrap' }}>
+            {group.map(({ slot: s, index: i }) => (
           <span
             key={i}
             style={{
@@ -168,6 +222,10 @@ export function BilingualFlip({
           >
             {s.ch || ' '}
           </span>
+            ))}
+            </span>
+            <wbr />
+          </React.Fragment>
         ))}
       </span>
     </Tag>

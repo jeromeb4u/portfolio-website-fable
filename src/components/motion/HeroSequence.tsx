@@ -13,7 +13,7 @@ gsap.registerPlugin(useGSAP)
  * rest of the site keys off html.motion-ok — so no-JS and reduced-motion users
  * see the hero fully rendered with no flash. Runs once.
  */
-const POS = [0, 0.08, 0.16, 0.32, 0.48, 0.56, 0.64] // seconds, per spec
+const POS = [0, 0.08, 0.16, 0.32, 0.48, 0.56, 0.64, 0.72] // seconds, per spec
 
 export function HeroSequence({
   children,

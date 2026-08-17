@@ -59,7 +59,7 @@ export function Reveal({
         stagger: stagger ? 0.08 : 0,
         scrollTrigger: {
           trigger: el,
-          start: 'top 82%',
+          start: 'top 85%',
           once: true,
         },
       })

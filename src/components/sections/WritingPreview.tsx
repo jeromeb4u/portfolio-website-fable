@@ -17,7 +17,7 @@ export async function WritingPreview({ posts, locale }: { posts: Post[]; locale:
   const latest = posts.slice(0, 3);
 
   return (
-    <section aria-labelledby="writing-heading" className="section-pad bg-surface">
+    <section id="writing" aria-labelledby="writing-heading" className="section-pad bg-surface">
       <div className="container-site">
         <Reveal as="h2" variant="clip" id="writing-heading" className="font-serif text-h2 text-ink">
           {t("title")}

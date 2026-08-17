@@ -1,19 +1,25 @@
 /**
- * Small pre-rendered radial-gradient dot, reused via drawImage for every
- * particle in the hero portrait and the ambient starfield. A single cached
- * sprite is far cheaper than a per-particle canvas gradient, and gives dots
- * a soft round glow instead of a flat pixel/square look.
+ * Soft warm dot used as the point sprite for every particle in the hero
+ * portrait scene (portrait cloud and ambient dust alike). One cached canvas
+ * texture is far cheaper than a per-particle gradient, and gives dots a round
+ * glow instead of a flat square.
+ *
+ * The stops are the reference scene's: a white core that falls off through a
+ * warm cream to a transparent amber edge, so additive blending stacks into
+ * neutral highlights rather than a saturated orange haze.
  */
-export function createGlowSprite(size = 32, rgb = '221,214,198'): HTMLCanvasElement {
-  const c = document.createElement('canvas')
-  c.width = c.height = size
-  const ctx = c.getContext('2d')!
-  const r = size / 2
-  const g = ctx.createRadialGradient(r, r, 0, r, r, r)
-  g.addColorStop(0, `rgba(${rgb},1)`)
-  g.addColorStop(0.4, `rgba(${rgb},0.5)`)
-  g.addColorStop(1, `rgba(${rgb},0)`)
-  ctx.fillStyle = g
-  ctx.fillRect(0, 0, size, size)
-  return c
+export function createGlowSprite(): HTMLCanvasElement {
+  const canvas = document.createElement('canvas')
+  canvas.width = 64
+  canvas.height = 64
+  const ctx = canvas.getContext('2d')
+  if (ctx) {
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32)
+    grad.addColorStop(0, 'rgba(255,255,255,1)')
+    grad.addColorStop(0.3, 'rgba(255,225,180,.8)')
+    grad.addColorStop(1, 'rgba(255,190,130,0)')
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, 64, 64)
+  }
+  return canvas
 }

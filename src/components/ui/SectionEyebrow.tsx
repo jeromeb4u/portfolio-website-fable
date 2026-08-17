@@ -3,10 +3,9 @@ import { Reveal } from '@/components/motion/Reveal'
 import { cn } from '@/lib/utils'
 
 /**
- * Mono eyebrow above a section heading — `ABOUT — 01` … `CONTACT — 06`. The
- * index encodes real reading order (an acceptable use of numbering, per the
- * design rules), and reveals with the heading. Label text comes from the
- * `sections` translation namespace.
+ * Mono eyebrow above a section heading — `[ Selected work ]`, `[ Praise ]`.
+ * Bracketed, unnumbered, matching the reference site. Reveals with the
+ * heading; label text comes from the `sections` translation namespace.
  */
 export function SectionEyebrow({ label, className }: { label: string; className?: string }) {
   return (

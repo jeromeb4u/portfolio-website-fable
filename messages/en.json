@@ -7,7 +7,30 @@
     "errorReload": "Something went wrong. Reload the page."
   },
   "hero": {
-    "getInTouch": "Get in touch"
+    "getInTouch": "Get in touch",
+    "scrollCue": "Scroll to explore"
+  },
+  "pages": {
+    "aboutEyebrow": "[ About ]",
+    "aboutTitle": "About",
+    "aboutDescription": "Frontend engineer — five and a half years of enterprise Angular, now building React apps and AI tools, relocating to Germany.",
+    "aboutLede": "The long version: where the enterprise years went, what I build now, and where I am heading.",
+    "recognitionEyebrow": "[ Recognition ]",
+    "recognitionTitle": "Recognition",
+    "recognitionDescription": "What colleagues and clients say about working with Jerome D'mello.",
+    "recognitionLede": "The people I have shipped with, in their own words.",
+    "writingEyebrow": "[ Writing ]",
+    "writingLede": "Notes on migrations, frontend practice, and building AI tools that people actually keep using."
+  },
+  "rail": {
+    "work": "Work",
+    "recommendations": "Praise",
+    "about": "About",
+    "skills": "Systems",
+    "experience": "Journey",
+    "writing": "Writing",
+    "recognition": "Recognition",
+    "contact": "Get in touch"
   },
   "meta": {
     "title": "Jerome D'mello — Frontend Engineer (React, Angular) & AI Tool Builder",
@@ -47,15 +70,15 @@
     "moreOnLinkedin": "More on LinkedIn"
   },
   "sections": {
-    "about": "About — 01",
-    "experience": "Experience — 02",
-    "experienceLede": "The path so far — from large-scale enterprise platforms to independent React and AI-driven product work.",
-    "experienceStart": "Foundations",
-    "experienceEnd": "Today",
-    "skills": "Skills — 03",
-    "work": "Work — 04",
-    "recommendations": "Recommendations — 05",
-    "contact": "Contact — 06"
+    "about": "[ About ]",
+    "experience": "[ My journey ]",
+    "experienceLede": "The path so far — from independent React and AI product work today, back to the enterprise platforms where it started.",
+    "experienceStart": "Today",
+    "experienceEnd": "Foundations",
+    "skills": "[ Systems & tooling ]",
+    "work": "[ Selected work ]",
+    "recommendations": "[ Praise ]",
+    "contact": "[ Contact ]"
   },
   "awards": {
     "heading": "Recognition"
