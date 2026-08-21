@@ -1,0 +1,3 @@
+{
+  "/(frontend)/[locale]/[...rest]/page": "app/(frontend)/[locale]/[...rest]/page.js"
+}

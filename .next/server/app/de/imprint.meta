@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(frontend)/layout,_N_T_/(frontend)/[locale]/layout,_N_T_/(frontend)/[locale]/imprint/layout,_N_T_/(frontend)/[locale]/imprint/page,_N_T_/de/imprint"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGZyb250ZW5kKQ/$d$locale/imprint/__PAGE__",
+    "/!KGZyb250ZW5kKQ/$d$locale/imprint",
+    "/!KGZyb250ZW5kKQ/$d$locale",
+    "/!KGZyb250ZW5kKQ",
+    "/_index",
+    "/_head"
+  ]
+}
