@@ -125,6 +125,7 @@ export default async function CaseStudyPage({
             width={cover.width ?? 1600}
             height={cover.height ?? 900}
             priority
+            sizes="(min-width: 1280px) 1184px, 92vw"
             className="w-full rounded-xl object-cover"
           />
         </div>

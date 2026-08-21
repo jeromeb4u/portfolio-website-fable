@@ -39,6 +39,7 @@ export function BilingualFlip({
   className,
   ambient = false,
   once = false,
+  scramble = false,
 }: {
   text: string
   altText: string
@@ -48,12 +49,27 @@ export function BilingualFlip({
   ambient?: boolean
   /** decode once on mount and stop — for long lines a loop would churn */
   once?: boolean
+  /**
+   * Decode in place: hover scrambles the glyphs and settles back on the SAME
+   * word instead of crossing into `altText`. The nav uses this so an EN bar
+   * stays EN (and a DE bar stays DE) through the animation.
+   *
+   * It also fixes the bar's spacing. The cross-language mode has to reserve
+   * the wider of the two labels so the box cannot collapse mid-hover, which
+   * pads every EN item out to its German width ("About" holding room for
+   * "Über mich"). Staying in one language means one width, so the reserve is
+   * the label itself and the gaps close up.
+   */
+  scramble?: boolean
 }) {
-  const n = Math.max(text.length, altText.length)
+  const n = scramble ? text.length : Math.max(text.length, altText.length)
 
   const [slots, setSlots] = useState<Slot[]>(() => buildSlots(text, n))
   const rootRef = useRef<HTMLElement>(null)
+  const hostRef = useRef<HTMLSpanElement>(null)
+  const sizerRef = useRef<HTMLSpanElement>(null)
   const rafRef = useRef<number | null>(null)
+  const unlockRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const targetRef = useRef(text)
   // Mirrors the rendered glyphs so an interrupted decode can reverse from
   // whatever is on screen. Written only where slots are committed — never
@@ -84,8 +100,10 @@ export function BilingualFlip({
     }
 
     // Interruptible decode: reverses from current glyphs, never queues.
-    const animateTo = (s: string) => {
-      if (targetRef.current === s && rafRef.current === null) return
+    // `force` re-runs a decode whose target is already on screen — the only way
+    // `scramble` mode can animate, since its target never changes.
+    const animateTo = (s: string, force = false) => {
+      if (!force && targetRef.current === s && rafRef.current === null) return
       targetRef.current = s
       if (!canCycle()) return setInstant(s)
       stop()
@@ -167,8 +185,46 @@ export function BilingualFlip({
     // on the visitor's actual device and keeps touch a plain static link.
     const trigger = (root.closest('a,button') as HTMLElement | null) ?? root
     const hoverable = () => !window.matchMedia('(hover: none)').matches
-    const toAlt = () => hoverable() && animateTo(altText)
-    const toBase = () => hoverable() && animateTo(text)
+
+    // The two languages are rarely the same length, and slots collapsing to 0
+    // shrink the element mid-hover. That is a feedback loop: the box narrows,
+    // the pointer is suddenly outside it, mouseleave fires and reverses the
+    // decode, the box widens back under the pointer, mouseenter fires again —
+    // forever (DE "ÜBER MICH" → EN "ABOUT" measured 3 enters / 2 leaves per
+    // hover, 73.5px ↔ 40.9px). So the box is pinned to the wider of the two
+    // labels while the flip runs, and released once it has settled — pinning
+    // at rest instead would pad every nav item out to its foreign-language
+    // width and leave visible gaps in the bar.
+    const settleMs = n * STAGGER + CHAR_DUR + 200
+    const lock = () => {
+      if (unlockRef.current) clearTimeout(unlockRef.current)
+      unlockRef.current = null
+      const host = hostRef.current
+      const sz = sizerRef.current
+      if (host && sz) host.style.minWidth = `${Math.max(host.offsetWidth, sz.offsetWidth)}px`
+    }
+    const releaseAfterSettle = () => {
+      if (unlockRef.current) clearTimeout(unlockRef.current)
+      unlockRef.current = setTimeout(() => {
+        if (hostRef.current) hostRef.current.style.minWidth = ''
+        unlockRef.current = null
+      }, settleMs)
+    }
+
+    const toAlt = () => {
+      if (!hoverable()) return
+      lock()
+      // Same-language mode re-decodes `text`; the width never changes, so the
+      // collapse/re-enter feedback loop the lock guards against cannot happen.
+      animateTo(scramble ? text : altText, scramble)
+    }
+    const toBase = () => {
+      if (!hoverable()) return
+      // Nothing to return to in scramble mode — let the in-place decode finish
+      // rather than restarting it on the way out.
+      if (!scramble) animateTo(text)
+      releaseAfterSettle()
+    }
     trigger.addEventListener('mouseenter', toAlt)
     trigger.addEventListener('mouseleave', toBase)
     trigger.addEventListener('focus', toAlt)
@@ -178,9 +234,10 @@ export function BilingualFlip({
       trigger.removeEventListener('mouseleave', toBase)
       trigger.removeEventListener('focus', toAlt)
       trigger.removeEventListener('blur', toBase)
+      if (unlockRef.current) clearTimeout(unlockRef.current)
       stop()
     }
-  }, [text, altText, ambient, once, n])
+  }, [text, altText, ambient, once, scramble, n])
 
   // Each glyph is its own inline-block, which the browser treats as a wrap
   // opportunity — so a long line breaks mid-word. Grouping slots into words and
@@ -200,10 +257,38 @@ export function BilingualFlip({
   })
   if (word.length > 0) words.push(word)
 
+  // The two languages are rarely the same length, and a slot that collapses to
+  // 0 shrinks the whole element mid-hover. On a hover-driven flip that is a
+  // feedback loop: the box narrows, the pointer is suddenly outside it,
+  // mouseleave fires and reverses the decode, the box widens back under the
+  // pointer, mouseenter fires again — forever (DE "ÜBER MICH" → EN "ABOUT"
+  // measured 3 enters / 2 leaves per hover, 73.5px ↔ 40.9px).
+  //
+  // So both labels share one grid cell: a hidden sizer holding the longer
+  // string keeps the cell — and therefore the link — at a constant width, while
+  // the animated glyphs stay in normal flow inside it and still wrap.
+  const sizer = scramble ? text : altText.length > text.length ? altText : text
+
   return (
     <Tag ref={rootRef} className={className}>
       <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
+      <span ref={hostRef} aria-hidden="true" style={{ display: 'inline-block', position: 'relative' }}>
+        {/* Measured, never seen: absolute so it costs no layout at rest, which
+            is what keeps the nav bar's spacing identical to before. */}
+        <span
+          ref={sizerRef}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            visibility: 'hidden',
+            whiteSpace: 'pre',
+            pointerEvents: 'none',
+          }}
+        >
+          {sizer}
+        </span>
+        <span>
         {words.map((group, wordIndex) => (
           <React.Fragment key={wordIndex}>
             {/* nowrap kills wrap opportunities *inside* the word; the <wbr />
@@ -227,6 +312,7 @@ export function BilingualFlip({
             <wbr />
           </React.Fragment>
         ))}
+        </span>
       </span>
     </Tag>
   )

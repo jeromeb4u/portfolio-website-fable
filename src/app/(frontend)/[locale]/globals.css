@@ -25,6 +25,7 @@
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-display: var(--font-elsie), ui-serif, Georgia, serif;
 
   --text-display: clamp(3.25rem, 8.5vw, 8rem);
   --text-display--line-height: 0.95;
@@ -73,6 +74,23 @@
     50% {
       opacity: 0.7;
       box-shadow: 0 0 0 5px rgb(34 154 22 / 0);
+    }
+  }
+  /* Resume slide-over: scrim fade + panel entrance. */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
     }
   }
 }

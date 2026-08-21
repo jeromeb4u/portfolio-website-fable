@@ -75,10 +75,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <Hero
         home={home}
         settings={settings}
-        locale={locale as Locale}
         contactFallbackLabel={tHero('getInTouch')}
         scrollCueLabel={tHero('scrollCue')}
         altEyebrow={altHome.hero?.eyebrow ?? undefined}
+        viewWorkLabel={tHero('viewWork')}
+        resumeLabels={{
+          trigger: tHero('resume'),
+          panel: tHero('resumePanel'),
+          download: tHero('resumeDownload'),
+          openTab: tHero('resumeOpenTab'),
+          close: tHero('resumeClose'),
+        }}
       />
       {/* Section order mirrors the reference site: work first (proof before
           biography), then testimonials, about, the systems/skills grid, the

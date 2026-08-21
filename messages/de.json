@@ -8,7 +8,13 @@
   },
   "hero": {
     "getInTouch": "Kontakt aufnehmen",
-    "scrollCue": "Weiter scrollen"
+    "scrollCue": "Weiter scrollen",
+    "resume": "Lebenslauf",
+    "resumePanel": "Lebenslauf",
+    "resumeDownload": "PDF herunterladen",
+    "resumeOpenTab": "In neuem Tab öffnen",
+    "resumeClose": "Lebenslauf schließen",
+    "viewWork": "Arbeiten ansehen"
   },
   "pages": {
     "aboutEyebrow": "[ Über mich ]",

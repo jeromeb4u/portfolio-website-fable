@@ -37,7 +37,16 @@ export function HeroSequence({
         const clip = el.dataset.reveal === 'clip'
         tl.to(
           el,
-          { opacity: 1, y: 0, clipPath: clip ? 'inset(0 0 0% 0)' : undefined },
+          {
+            opacity: 1,
+            y: 0,
+            clipPath: clip ? 'inset(0 0 0% 0)' : undefined,
+            // A finished `inset(0 0 0 0)` still clips to the border box, which
+            // shears descenders off display faces (Elsie's J in the hero name).
+            // Once the wipe is done there is nothing left to hide, so drop the
+            // clip entirely rather than leaving a flush one behind.
+            onComplete: clip ? () => { el.style.clipPath = 'none' } : undefined,
+          },
           POS[i] ?? i * 0.08,
         )
       })

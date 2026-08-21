@@ -120,6 +120,10 @@ export function CardCover({
           alt={alt}
           width={width}
           height={height}
+          // Two-up inside container-site (max 1184px content) above md, full
+          // bleed below. Without this next/image assumes the intrinsic width
+          // and ships the 3840px candidate to phones.
+          sizes="(min-width: 1280px) 576px, (min-width: 768px) 46vw, 92vw"
           className="media-desat aspect-[3/2] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05] motion-reduce:group-hover:scale-100"
         />
       ) : (

@@ -116,7 +116,7 @@ export const runSeed = async (payload: Payload): Promise<void> => {
     slug: 'site-settings',
     locale: 'en',
     data: {
-      siteName: "Jerome D'mello",
+      siteName: "Jerome D’mello",
       tagline: 'Frontend engineer — 5.5 years of Angular at enterprise scale, now building React apps and AI tools.',
       email: 'jeromeb4u@gmail.com',
       location: 'Vasai, India — relocating to Germany',

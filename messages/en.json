@@ -8,7 +8,13 @@
   },
   "hero": {
     "getInTouch": "Get in touch",
-    "scrollCue": "Scroll to explore"
+    "scrollCue": "Scroll to explore",
+    "resume": "Resume",
+    "resumePanel": "Resume",
+    "resumeDownload": "Download PDF",
+    "resumeOpenTab": "Open full tab",
+    "resumeClose": "Close resume",
+    "viewWork": "View Work"
   },
   "pages": {
     "aboutEyebrow": "[ About ]",

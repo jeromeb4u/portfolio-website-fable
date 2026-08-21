@@ -74,6 +74,7 @@ export async function About({
                 alt={portrait!.alt ?? ''}
                 width={portrait!.width ?? 640}
                 height={portrait!.height ?? 800}
+                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 92vw"
                 className="media-desat w-full rounded-xl border border-line object-cover"
               />
             </Parallax>

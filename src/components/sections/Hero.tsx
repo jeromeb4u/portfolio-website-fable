@@ -3,9 +3,9 @@ import { HeroSequence } from "@/components/motion/HeroSequence";
 import { BilingualFlip } from "@/components/motion/BilingualFlip";
 import { HeroParticleScene } from "@/components/motion/HeroParticleScene";
 import { buttonClasses } from "@/components/ui/Button";
-import { AvailabilityChip } from "@/components/ui/AvailabilityChip";
-import type { Home, SiteSetting, Media } from "@/payload-types";
-import type { Locale } from "@/i18n/routing";
+import { ResumePanel } from "@/components/ui/ResumePanel";
+import { Link } from "@/i18n/navigation";
+import type { Home, SiteSetting } from "@/payload-types";
 
 /**
  * Editorial hero: the copy set over a particle portrait that fills the whole
@@ -24,26 +24,35 @@ import type { Locale } from "@/i18n/routing";
 export function Hero({
   home,
   settings,
-  locale,
   contactFallbackLabel,
   scrollCueLabel,
   altEyebrow,
+  viewWorkLabel,
+  resumeLabels,
 }: {
   home: Home;
   settings: SiteSetting;
-  locale: Locale;
   contactFallbackLabel: string;
   scrollCueLabel: string;
   altEyebrow?: string;
+  viewWorkLabel: string;
+  resumeLabels: {
+    trigger: string;
+    panel: string;
+    download: string;
+    openTab: string;
+    close: string;
+  };
 }) {
   const hero = home.hero;
 
-  // CV download (portfolio-improvements Phase 1): locale-appropriate file,
-  // English fallback. With no CV uploaded the button must never claim to be
-  // a download — it scrolls to Contact under a label that says so.
-  const cvDe = settings.cvDe as Media | null | undefined;
-  const cvEn = settings.cvEn as Media | null | undefined;
-  const cv = locale === "de" ? cvDe ?? cvEn : cvEn;
+  // The CV is a static asset rather than a Payload upload on purpose. Payload
+  // serves uploads from /api/media/file/<name>, which needs both the file and
+  // its database row present on the server — but `/media` and `dev.db` are
+  // gitignored, so neither reaches the cPanel box and the route would 404
+  // there. Shipping it under public/ makes it part of the deployed artifact.
+  // To replace it: drop a new PDF at this path and redeploy.
+  const CV_URL = "/resume/Jerome_Dmello_CV.pdf";
 
   return (
     <section
@@ -76,15 +85,6 @@ export function Hero({
 
       <div className="container-site relative z-10">
         <HeroSequence className="max-w-2xl">
-          {settings.availabilityNote ? (
-            <div data-seq="0" data-reveal className="mb-10">
-              <AvailabilityChip
-                availability={settings.availability}
-                note={settings.availabilityNote}
-              />
-            </div>
-          ) : null}
-
           {/* Eyebrow stack: where he is, then what he does — two mono lines
               above the name, exactly the reference's opening move. */}
           <div data-seq="1" data-reveal className="mb-7 flex max-w-[24rem] flex-col gap-2">
@@ -101,7 +101,7 @@ export function Hero({
           </div>
 
           {/* The heading is the name, nothing else. */}
-          <h1 className="font-serif text-[clamp(3.5rem,6.5vw,5.85rem)] font-normal leading-[0.92] tracking-[-0.03em] text-ink">
+          <h1 className="font-display text-[clamp(3.25rem,6vw,5.4rem)] font-normal leading-[1.02] tracking-[-0.01em] text-ink">
             <span data-seq="2" data-reveal="clip" className="block">
               {hero?.headingLine1}
             </span>
@@ -128,21 +128,24 @@ export function Hero({
             </p>
           ) : null}
 
+          {/* Three CTAs: the work index (a real route), the contact section at
+              the foot of the homepage, and the resume slide-over. */}
           <div data-seq="6" data-reveal className="mt-9 flex flex-wrap items-center gap-4">
-            {hero?.primaryCtaLabel ? (
-              <a href="#work" className={buttonClasses("primary")}>
-                {hero.primaryCtaLabel}
-              </a>
-            ) : null}
-            {cv?.url ? (
-              <a href={cv.url} download className={buttonClasses("ghost")}>
-                {hero?.secondaryCtaLabel}
-              </a>
-            ) : (
-              <a href="#contact" className={buttonClasses("ghost")}>
-                {contactFallbackLabel}
-              </a>
-            )}
+            <Link href="/work" className={buttonClasses("primary")}>
+              {viewWorkLabel}
+            </Link>
+            <a href="#contact" className={buttonClasses("ghost")}>
+              {contactFallbackLabel}
+            </a>
+            <ResumePanel
+              url={CV_URL}
+              filename="Jerome_Dmello_CV.pdf"
+              triggerLabel={resumeLabels.trigger}
+              panelLabel={resumeLabels.panel}
+              downloadLabel={resumeLabels.download}
+              openTabLabel={resumeLabels.openTab}
+              closeLabel={resumeLabels.close}
+            />
           </div>
 
           {/* Scroll cue: hands the eye to the next section, which is where the

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Elsie } from "next/font/google";
 import { Toaster } from "sonner";
 import { routing, type Locale } from "@/i18n/routing";
 import { getSiteSettings, getNavigation } from "@/lib/data";
@@ -24,6 +24,13 @@ const geist = Geist({
 const geistMono = Geist_Mono({
   subsets: ["latin", "latin-ext"],
   variable: "--font-geist-mono",
+  display: "swap",
+});
+// Display face for the hero name only (--font-display). Didone, 400 + 900.
+const elsie = Elsie({
+  weight: ["400", "900"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-elsie",
   display: "swap",
 });
 const instrumentSerif = Instrument_Serif({
@@ -51,7 +58,7 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(absoluteUrl("/")),
-    title: { default: title, template: "%s — Jerome D'mello" },
+    title: { default: title, template: "%s — Jerome D’mello" },
     description,
     alternates: {
       canonical: absoluteUrl(`/${locale}`),
@@ -89,7 +96,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable} ${elsie.variable}`}
     >
       <body>
         <PersonJsonLd

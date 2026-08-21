@@ -21,8 +21,9 @@ import { planeFragmentShader, planeVertexShader } from './particleShaders'
  * scrolled, so they never fight the scroll-away.
  */
 
-/** Offscreen sampling resolution for the portrait. */
-const TEX = 280
+/** Offscreen sampling resolution for the portrait. One candidate per pixel, so
+ *  this sets the grain: a finer grid gives smaller, more numerous dots. */
+const TEX = 430
 /** Portrait plane size in world units. */
 const PLANE_W = 11
 const PLANE_H = 11.6
@@ -38,8 +39,29 @@ const ELL_CY = 0.02
 /** Luminance below this emits no particle — the studio backdrop reads ~0.10,
  *  comfortably under the floor, so only the lit face and hair survive. */
 const LUMA_FLOOR = 0.17
-/** Base keep-probability, reduced toward the ellipse edge. */
-const KEEP = 0.995
+/** Luminance at (and above) which the stipple reaches full density. Pulling the
+ *  ceiling well below pure white means the highlights actually saturate instead
+ *  of only the few brightest specular pixels. */
+const LUMA_CEIL = 0.70
+/**
+ * Tone is carried by DENSITY, not by per-dot brightness — the difference
+ * between a stipple engraving and a flat dusting.
+ *
+ * The old sampler kept ~99.5% of every pixel above the floor and varied each
+ * dot's colour instead, so shadow and highlight held the same number of points
+ * and the face read as one grey mass. Here the keep-probability *is* the tonal
+ * value, so eye sockets and the jaw shadow thin out to bare canvas while the
+ * brow and cheek pack solid, and the dots themselves stay near-uniform.
+ *
+ * Gamma > 1 darkens the mid-tones, which is what gives the reference its hard
+ * separation between lit and unlit planes.
+ */
+const TONE_GAMMA = 1.55
+/** Dot brightness range. Narrow at the bottom so shadow dots stay quiet, but
+ *  lifted at the top: under additive blending the packed highlight areas need
+ *  to bloom toward white, which is what gives the reference its lit look. */
+const GLOW_MIN = 0.70
+const GLOW_MAX = 1.85
 /** Ambient dust motes drifting across the whole scene. */
 const DUST_COUNT = 300
 
@@ -163,8 +185,14 @@ export function createParticlePortrait(host: HTMLElement, src: string): () => vo
           (nx / ELL_RX) * (nx / ELL_RX) + ((ny + ELL_CY) / ELL_RY) * ((ny + ELL_CY) / ELL_RY)
         if (lum < LUMA_FLOOR || ell >= 1) continue
 
+        // Tonal value across the usable luminance band, eased at both ends so
+        // the floor does not cut a hard silhouette edge into the shadows.
+        const tone = smoothstep01((lum - LUMA_FLOOR) / (LUMA_CEIL - LUMA_FLOOR))
+
         const u = Math.max(0, (ell - 0.5) / 0.5)
-        if (Math.random() > KEEP * (1 - 0.45 * u)) continue
+        // Density = tone, still falling off toward the ellipse edge so the
+        // portrait dissolves into the surrounding dust rather than stopping.
+        if (Math.random() > Math.pow(tone, TONE_GAMMA) * (1 - 0.45 * u)) continue
 
         const jitter = u * u * 2
         pos.push(
@@ -174,7 +202,7 @@ export function createParticlePortrait(host: HTMLElement, src: string): () => vo
         )
         edges.push(u)
 
-        const g = Math.min(1.7, 0.85 + lum)
+        const g = GLOW_MIN + (GLOW_MAX - GLOW_MIN) * tone
         colors.push(g, g, g)
 
         const rx = 2 * Math.random() - 1
@@ -198,7 +226,9 @@ export function createParticlePortrait(host: HTMLElement, src: string): () => vo
     )
     geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
     const mat = new THREE.PointsMaterial({
-      size: 0.062,
+      // Smaller than the old 0.062 to match the finer TEX grid — oversized dots
+      // would merge back into the blur that density is meant to resolve.
+      size: 0.042,
       map: sprite,
       vertexColors: true,
       transparent: true,

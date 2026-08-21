@@ -41,6 +41,7 @@ export async function PostBody({ post, locale }: { post: Post; locale: Locale })
             width={cover.width ?? 1200}
             height={cover.height ?? 630}
             priority
+            sizes="(min-width: 860px) 768px, 92vw"
             className="w-full rounded-xl object-cover"
           />
         </div>

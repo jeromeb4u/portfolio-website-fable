@@ -150,7 +150,7 @@ export function Header({
           href="/"
           onClick={closeMenu}
           className={cn(
-            'mono-label transition-colors duration-300',
+            'font-display text-[1.3rem] leading-none tracking-[0.01em] transition-colors duration-300',
             overDark ? 'text-inverse-text' : 'text-ink',
           )}
         >
@@ -172,7 +172,7 @@ export function Header({
                   : 'text-ink-muted hover:text-ink',
               )}
             >
-              <BilingualFlip text={item.label} altText={item.altLabel} />
+              <BilingualFlip scramble text={item.label} altText={item.altLabel} />
             </NavLink>
           ))}
           <LocaleSwitcher className="mono-label" />
@@ -182,7 +182,7 @@ export function Header({
             onNavigate={closeMenu}
             className={buttonClasses('primary', 'px-5 py-2 text-xs')}
           >
-            <BilingualFlip text={ctaLabel} altText={ctaAltLabel} />
+            <BilingualFlip scramble text={ctaLabel} altText={ctaAltLabel} />
           </NavLink>
         </nav>
 
