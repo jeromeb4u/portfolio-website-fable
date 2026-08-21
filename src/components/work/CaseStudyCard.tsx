@@ -2,6 +2,7 @@ import React from "react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { CardCover } from "@/components/work/CardCover";
+import { mediaUrl } from '@/lib/mediaUrl'
 import type { CaseStudy, Media } from "@/payload-types";
 
 /**
@@ -19,7 +20,7 @@ export async function CaseStudyCard({ cs, index }: { cs: CaseStudy; index: numbe
     <li className="group">
       <Link href={`/work/${cs.slug}`} className="block">
         <CardCover
-          url={cover?.url}
+          url={mediaUrl(cover)}
           alt={cover?.alt ?? cs.title}
           width={cover?.width ?? 960}
           height={cover?.height ?? 640}

@@ -58,6 +58,15 @@ self.__SERVER_FILES_MANIFEST={
       "contentDispositionType": "attachment",
       "localPatterns": [
         {
+          "pathname": "/media/**"
+        },
+        {
+          "pathname": "/images/**"
+        },
+        {
+          "pathname": "/seed-covers/**"
+        },
+        {
           "pathname": "/api/media/file/**"
         },
         {

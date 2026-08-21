@@ -11,10 +11,16 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
   images: {
+    // Declaring localPatterns at all makes it an allowlist: anything not
+    // matched here is rejected by the optimizer with 400 `"url" parameter is
+    // not allowed`. It previously listed only the Payload file route, so every
+    // image under public/ 400'd in production.
     localPatterns: [
-      {
-        pathname: '/api/media/file/**',
-      },
+      { pathname: '/media/**' },
+      { pathname: '/images/**' },
+      { pathname: '/seed-covers/**' },
+      // Legacy Payload-served uploads (see lib/mediaUrl fallback).
+      { pathname: '/api/media/file/**' },
     ],
   },
   // These ship native/platform binaries. Bundling them bakes in whatever OS

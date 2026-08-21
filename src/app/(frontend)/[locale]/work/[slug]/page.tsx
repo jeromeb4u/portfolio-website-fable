@@ -11,6 +11,7 @@ import { getCaseStudyBySlug, getPublishedCaseStudies } from '@/lib/data'
 import { Reveal } from '@/components/motion/Reveal'
 import { buttonClasses } from '@/components/ui/Button'
 import { buildLanguageAlternates, buildOpenGraph, absoluteUrl } from '@/lib/seo'
+import { mediaUrl } from '@/lib/mediaUrl'
 import type { Media } from '@/payload-types'
 
 export const revalidate = 300
@@ -46,7 +47,7 @@ export async function generateMetadata({
       title: cs.title,
       description: cs.summary,
       path: `/work/${slug}`,
-      imagePath: cover?.url ?? undefined,
+      imagePath: mediaUrl(cover),
     }),
   }
 }
@@ -65,6 +66,7 @@ export default async function CaseStudyPage({
 
   const t = await getTranslations('work')
   const cover = cs.coverImage as Media
+  const coverSrc = mediaUrl(cover)
   const all = await getPublishedCaseStudies(locale as Locale)
   const idx = all.findIndex((d) => d.slug === cs.slug)
   const prev = idx > 0 ? all[idx - 1] : null
@@ -117,10 +119,10 @@ export default async function CaseStudyPage({
         ) : null}
       </div>
 
-      {cover?.url ? (
+      {coverSrc ? (
         <div className="container-site mt-14">
           <Image
-            src={cover.url}
+            src={coverSrc}
             alt={cover.alt ?? cs.title}
             width={cover.width ?? 1600}
             height={cover.height ?? 900}

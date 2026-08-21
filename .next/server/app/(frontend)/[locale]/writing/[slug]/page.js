@@ -1,7 +1,7 @@
 var R=require("../../../../../chunks/ssr/[turbopack]_runtime.js")("server/app/(frontend)/[locale]/writing/[slug]/page.js")
 R.c("server/chunks/ssr/[root-of-the-server]__04ogy2l._.js")
 R.c("server/chunks/ssr/0vzu_next_dist_esm_build_templates_app-page_0~0h7gh.js")
-R.c("server/chunks/ssr/_0pfk0qf._.js")
+R.c("server/chunks/ssr/_04qgfxd._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__0w8pg0.._.js")
 R.c("server/chunks/ssr/0vzu_next_dist_compiled_@opentelemetry_api_index_0zay_o~.js")
 R.c("server/chunks/ssr/0vzu_next_dist_05ayxse._.js")

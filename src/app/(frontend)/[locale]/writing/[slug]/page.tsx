@@ -7,6 +7,7 @@ import { routing, type Locale } from '@/i18n/routing'
 import { getPostBySlug, getPublishedPosts } from '@/lib/data'
 import { PostBody } from '@/components/sections/PostBody'
 import { buildLanguageAlternates, buildOpenGraph, absoluteUrl } from '@/lib/seo'
+import { mediaUrl } from '@/lib/mediaUrl'
 import type { Media } from '@/payload-types'
 
 export const revalidate = 300
@@ -42,7 +43,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.summary,
       path: `/writing/${slug}`,
-      imagePath: cover?.url ?? undefined,
+      imagePath: mediaUrl(cover),
     }),
   }
 }

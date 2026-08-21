@@ -58,6 +58,15 @@
       "contentDispositionType": "attachment",
       "localPatterns": [
         {
+          "pathname": "/media/**"
+        },
+        {
+          "pathname": "/images/**"
+        },
+        {
+          "pathname": "/seed-covers/**"
+        },
+        {
           "pathname": "/api/media/file/**"
         },
         {

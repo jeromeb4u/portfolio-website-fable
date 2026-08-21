@@ -7,6 +7,7 @@ import { Parallax } from '@/components/motion/Parallax'
 import { CountUp } from '@/components/motion/CountUp'
 import { SectionEyebrow } from '@/components/ui/SectionEyebrow'
 import type { Home, Media } from '@/payload-types'
+import { mediaUrl } from '@/lib/mediaUrl'
 
 /**
  * With no portrait uploaded the section is a single centered column — never
@@ -24,7 +25,8 @@ export async function About({
 }) {
   const about = home.about
   const portrait = about?.portraitImage as Media | null | undefined
-  const hasPortrait = Boolean(portrait?.url)
+  const portraitSrc = mediaUrl(portrait)
+  const hasPortrait = Boolean(portraitSrc)
   const t = await getTranslations('sections')
 
   return (
@@ -70,7 +72,7 @@ export async function About({
           <div className="lg:col-span-5">
             <Parallax speed={0.12}>
               <Image
-                src={portrait!.url!}
+                src={portraitSrc!}
                 alt={portrait!.alt ?? ''}
                 width={portrait!.width ?? 640}
                 height={portrait!.height ?? 800}

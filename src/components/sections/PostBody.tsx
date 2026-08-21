@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/motion/Reveal";
 import { RichTextRenderer } from "@/components/richtext/RichTextRenderer";
 import { readTimeMinutes } from "@/lib/readtime";
+import { mediaUrl } from "@/lib/mediaUrl";
 import type { Post, Media } from "@/payload-types";
 import type { Locale } from "@/i18n/routing";
 
@@ -11,6 +12,7 @@ import type { Locale } from "@/i18n/routing";
 export async function PostBody({ post, locale }: { post: Post; locale: Locale }) {
   const t = await getTranslations("writing");
   const cover = post.coverImage as Media | null;
+  const coverSrc = mediaUrl(cover);
 
   return (
     <article className="pt-32">
@@ -33,13 +35,13 @@ export async function PostBody({ post, locale }: { post: Post; locale: Locale })
         </Reveal>
       </div>
 
-      {cover?.url ? (
+      {coverSrc ? (
         <div className="container-site mt-14 max-w-3xl">
           <Image
-            src={cover.url}
-            alt={cover.alt ?? post.title}
-            width={cover.width ?? 1200}
-            height={cover.height ?? 630}
+            src={coverSrc}
+            alt={cover?.alt ?? post.title}
+            width={cover?.width ?? 1200}
+            height={cover?.height ?? 630}
             priority
             sizes="(min-width: 860px) 768px, 92vw"
             className="w-full rounded-xl object-cover"
